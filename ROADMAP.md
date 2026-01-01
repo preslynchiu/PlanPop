@@ -8,14 +8,15 @@ A cute, colorful to-do list app for students ages 10-18.
 
 Setting up the foundation for your app.
 
-- [ ] Create a new Xcode project (iOS App, SwiftUI)
-- [ ] Name the project "PlanPop"
-- [ ] Set minimum iOS version to 16.0
-- [ ] Copy all Swift files into the project
-- [ ] Organize files into folders (Models, Views, ViewModels, etc.)
-- [ ] Add app icon (design a cute, pastel-colored icon)
-- [ ] Configure Info.plist for notifications permission
+- [x] Create a new Xcode project (iOS App, SwiftUI)
+- [x] Name the project "PlanPop"
+- [x] Set minimum iOS version to 16.0
+- [x] Copy all Swift files into the project
+- [x] Organize files into folders (Models, Views, ViewModels, etc.)
+- [x] Add app icon (design a cute, pastel-colored icon)
+- [x] Configure Info.plist for notifications permission
   - Add `NSUserNotificationsUsageDescription` key
+- [x] Initialize Git repository
 
 ---
 
@@ -134,7 +135,7 @@ Making your app look cute and polished.
 
 - [x] Create card styling modifier
 
-- [ ] Design and add app icon
+- [x] Design and add app icon
 - [ ] Create launch screen
 
 ---
