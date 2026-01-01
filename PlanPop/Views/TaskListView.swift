@@ -235,8 +235,13 @@ struct FilterPill: View {
             .background(isSelected ? Theme.primary : Theme.cardBackground)
             .cornerRadius(20)
             .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+            .scaleEffect(isSelected ? 1.05 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
         }
         .buttonStyle(PlainButtonStyle())
+        .accessibilityLabel("\(title) filter, \(count) tasks")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityHint("Double tap to filter by \(title.lowercased())")
     }
 }
 

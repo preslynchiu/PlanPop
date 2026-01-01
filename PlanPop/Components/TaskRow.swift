@@ -21,10 +21,26 @@ struct TaskRow: View {
     // Action when row is tapped (for editing)
     var onTap: () -> Void
 
+    // Haptic feedback generators
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    private let successFeedback = UINotificationFeedbackGenerator()
+
     var body: some View {
         HStack(spacing: 12) {
             // Checkbox button
-            Button(action: onToggle) {
+            Button(action: {
+                // Trigger haptic feedback
+                if task.isCompleted {
+                    // Light tap when uncompleting
+                    impactFeedback.impactOccurred()
+                } else {
+                    // Success feedback when completing
+                    successFeedback.notificationOccurred(.success)
+                }
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    onToggle()
+                }
+            }) {
                 ZStack {
                     // Outer circle
                     Circle()
@@ -39,12 +55,16 @@ struct TaskRow: View {
                         Circle()
                             .fill(Theme.success)
                             .frame(width: 20, height: 20)
+                            .transition(.scale.combined(with: .opacity))
 
                         Image(systemName: "checkmark")
                             .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.white)
+                            .transition(.scale.combined(with: .opacity))
                     }
                 }
+                .frame(width: 44, height: 44) // Minimum tap target size
+                .contentShape(Rectangle()) // Expand tap area
             }
             .buttonStyle(PlainButtonStyle())
 
@@ -115,6 +135,44 @@ struct TaskRow: View {
         .shadow(color: Color.black.opacity(0.03), radius: 4, x: 0, y: 2)
         .contentShape(Rectangle())
         .onTapGesture(perform: onTap)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(task.isCompleted ? "Double tap to mark as incomplete" : "Double tap to mark as complete")
+        .accessibilityAddTraits(task.isCompleted ? .isSelected : [])
+    }
+
+    // MARK: - Accessibility
+
+    private var accessibilityLabel: String {
+        var label = task.title
+
+        if task.isCompleted {
+            label = "Completed: \(label)"
+        }
+
+        if let category = category {
+            label += ", Category: \(category.name)"
+        }
+
+        if let dueDate = task.dueDate {
+            if task.isOverdue {
+                label += ", Overdue"
+            } else if Calendar.current.isDateInToday(dueDate) {
+                label += ", Due today"
+            } else if Calendar.current.isDateInTomorrow(dueDate) {
+                label += ", Due tomorrow"
+            }
+        }
+
+        if task.priority == 3 {
+            label += ", High priority"
+        }
+
+        if task.hasReminder && !task.isCompleted {
+            label += ", Has reminder"
+        }
+
+        return label
     }
 
     // Format the due date nicely

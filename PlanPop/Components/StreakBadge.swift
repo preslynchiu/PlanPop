@@ -36,6 +36,8 @@ struct StreakBadge: View {
                 Theme.textSecondary.opacity(0.1)
         )
         .cornerRadius(20)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(streak == 1 ? "1 day streak" : "\(streak) day streak")
     }
 }
 

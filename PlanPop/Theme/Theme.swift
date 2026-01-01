@@ -25,7 +25,7 @@ struct Theme {
 
     /// Text colors
     static let textPrimary = Color(hex: "#4A4A4A")
-    static let textSecondary = Color(hex: "#8A8A8A")
+    static let textSecondary = Color(hex: "#767676") // WCAG AA compliant (4.5:1 contrast)
 
     /// Success color (soft green)
     static let success = Color(hex: "#A8E6CF")

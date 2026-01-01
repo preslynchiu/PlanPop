@@ -136,7 +136,7 @@ Making your app look cute and polished.
 - [x] Create card styling modifier
 
 - [x] Design and add app icon
-- [ ] Create launch screen
+- [x] Create launch screen
 
 ---
 
@@ -155,7 +155,7 @@ Keeping users on track with reminders.
   - Handle notification taps
   - Clear badge on launch
 
-- [ ] Test notifications work correctly
+- [x] Test notifications work correctly
   - Create a task with reminder
   - Wait for notification to fire
   - Tap notification to open app
@@ -206,12 +206,12 @@ Making sure everything works perfectly.
 
 ### Polish Checklist
 
-- [ ] Add haptic feedback for task completion
-- [ ] Smooth animations for all interactions
-- [ ] Verify all text is readable
-- [ ] Check color contrast meets accessibility standards
-- [ ] Test VoiceOver accessibility
-- [ ] Ensure buttons are easy to tap (44pt minimum)
+- [x] Add haptic feedback for task completion
+- [x] Smooth animations for all interactions
+- [x] Verify all text is readable
+- [x] Check color contrast meets accessibility standards
+- [x] Test VoiceOver accessibility
+- [x] Ensure buttons are easy to tap (44pt minimum)
 
 ---
 

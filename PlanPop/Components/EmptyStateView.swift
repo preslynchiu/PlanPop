@@ -17,6 +17,7 @@ struct EmptyStateView: View {
             // Cute illustration/emoji
             Text(type.emoji)
                 .font(.system(size: 80))
+                .accessibilityHidden(true) // Decorative
 
             // Main message
             Text(type.title)
@@ -34,6 +35,7 @@ struct EmptyStateView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
+        .accessibilityElement(children: .combine)
     }
 }
 
