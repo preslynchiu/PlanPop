@@ -16,6 +16,7 @@
 		3192676AD13B419E3AACB9B6 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBB0E0527D4ED05BB802E71 /* UserSettings.swift */; };
 		36FC77614B64DC1A268E9496 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9C3222879DD81164C28041 /* Task.swift */; };
 		3BFA523A13F6E08F48B4EDFD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC52A8A7C2DA92FD5EE4D39A /* Theme.swift */; };
+		47FE66688BE35DC56C3EF8D0 /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DACA0B1DE9FA867F5AD03A8 /* AchievementsView.swift */; };
 		5342235FE48BE0C7C24BA3E2 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099770BC48EFF2C0F8FCF17 /* AddTaskView.swift */; };
 		6FC539F9AFC914531E260BCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6ED8EA538816ABE29A379AE4 /* Assets.xcassets */; };
 		76F4AC89AF5BC1E4B8BBEA97 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AA34E95BBA0E0A024551D /* TaskListView.swift */; };
@@ -25,6 +26,7 @@
 		BC7E8838FCE36161E51F4719 /* TaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520D22589127242370A142DB /* TaskRow.swift */; };
 		CCA8782FED8784B2D1952C88 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED1A407A6D1A86C86BAAC5 /* StoreManager.swift */; };
 		D3109DB8D1564DBB0FCDA795 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5979AC4D327F6D16A52AE97F /* Preview Assets.xcassets */; };
+		E95C79D1E682BEA6CA2A722F /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE557BC9C8185643C1A6CF /* Achievement.swift */; };
 		EFDD813FF04A88E701D59054 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81892E5041E5E7A563CB0837 /* NotificationManager.swift */; };
 		F8432148C5C37CB5B0F5B80C /* StreakBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD717868A7035C9E82FB286 /* StreakBadge.swift */; };
 /* End PBXBuildFile section */
@@ -47,11 +49,13 @@
 		7199AE5E1C0E4E4842B73704 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		7BBB0E0527D4ED05BB802E71 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		7CED1A407A6D1A86C86BAAC5 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		7DACA0B1DE9FA867F5AD03A8 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
 		81892E5041E5E7A563CB0837 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		92FF420C4DF809F7930D88D4 /* PlanPop.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PlanPop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A099770BC48EFF2C0F8FCF17 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 		A265CD4102C947536FDE050A /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		AC52A8A7C2DA92FD5EE4D39A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		F1CE557BC9C8185643C1A6CF /* Achievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -69,6 +73,7 @@
 		66897EC231DEDFBEC7051FDE /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F1CE557BC9C8185643C1A6CF /* Achievement.swift */,
 				0CE9D54CA2BCE406BD1FDD92 /* Category.swift */,
 				3F9C3222879DD81164C28041 /* Task.swift */,
 				7BBB0E0527D4ED05BB802E71 /* UserSettings.swift */,
@@ -121,6 +126,7 @@
 		D869A0195376DF640EAF26F8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7DACA0B1DE9FA867F5AD03A8 /* AchievementsView.swift */,
 				A099770BC48EFF2C0F8FCF17 /* AddTaskView.swift */,
 				647822A594D1DA2BD22DDC2E /* CategoryManagerView.swift */,
 				0EEFA423D3293A4F87EDB3A5 /* ContentView.swift */,
@@ -227,6 +233,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E95C79D1E682BEA6CA2A722F /* Achievement.swift in Sources */,
+				47FE66688BE35DC56C3EF8D0 /* AchievementsView.swift in Sources */,
 				5342235FE48BE0C7C24BA3E2 /* AddTaskView.swift in Sources */,
 				B952D1EB762A44A824DB189B /* Category.swift in Sources */,
 				8F2D2508207920D28EFB07C8 /* CategoryManagerView.swift in Sources */,

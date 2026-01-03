@@ -36,6 +36,18 @@ struct ContentView: View {
         .tint(Theme.primary)
         .environmentObject(viewModel)
         .confetti(isShowing: $viewModel.showConfetti)
+        .alert("Achievement Unlocked!", isPresented: .init(
+            get: { viewModel.newlyUnlockedAchievement != nil },
+            set: { if !$0 { viewModel.clearNewlyUnlockedAchievement() } }
+        )) {
+            Button("Awesome!", role: .cancel) {
+                viewModel.clearNewlyUnlockedAchievement()
+            }
+        } message: {
+            if let achievement = viewModel.newlyUnlockedAchievement {
+                Text("\(achievement.name)\n\(achievement.description)")
+            }
+        }
         .task {
             // Initialize StoreManager and sync premium status on launch
             await StoreManager.shared.updatePurchasedStatus()

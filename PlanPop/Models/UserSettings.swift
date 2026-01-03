@@ -59,6 +59,11 @@ struct UserSettings: Codable {
 
     /// Total tasks ever completed
     var totalTasksCompleted: Int = 0
+
+    // MARK: - Achievements
+
+    /// IDs of unlocked achievements
+    var unlockedAchievements: Set<String> = []
 }
 
 // MARK: - Streak Logic

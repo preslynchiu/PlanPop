@@ -14,6 +14,7 @@ struct SettingsView: View {
     // Sheet states
     @State private var showingCategoryManager = false
     @State private var showingPremiumInfo = false
+    @State private var showingAchievements = false
     @State private var notificationsEnabled = false
 
     var body: some View {
@@ -39,6 +40,24 @@ struct SettingsView: View {
                                 Label("Manage Categories", systemImage: "folder.fill")
                                 Spacer()
                                 Text("\(viewModel.categories.count)/\(viewModel.settings.isPremium ? "∞" : "3")")
+                                    .foregroundColor(Theme.textSecondary)
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(Theme.textSecondary)
+                            }
+                        }
+                        .foregroundColor(Theme.textPrimary)
+                    }
+
+                    // Achievements section
+                    Section("Achievements") {
+                        Button {
+                            showingAchievements = true
+                        } label: {
+                            HStack {
+                                Label("View Achievements", systemImage: "trophy.fill")
+                                Spacer()
+                                Text("\(viewModel.settings.unlockedAchievements.count)/\(Achievement.totalCount)")
                                     .foregroundColor(Theme.textSecondary)
                                 Image(systemName: "chevron.right")
                                     .font(.caption)
@@ -144,6 +163,9 @@ struct SettingsView: View {
             }
             .sheet(isPresented: $showingPremiumInfo) {
                 PremiumInfoView()
+            }
+            .sheet(isPresented: $showingAchievements) {
+                AchievementsView()
             }
             .onAppear {
                 checkNotificationStatus()

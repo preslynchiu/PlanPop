@@ -27,6 +27,9 @@ class TaskViewModel: ObservableObject {
     /// Currently selected filter
     @Published var selectedFilter: TaskFilter = .today
 
+    /// Newly unlocked achievement (for celebration UI)
+    @Published var newlyUnlockedAchievement: Achievement?
+
     // MARK: - Constants
 
     /// Maximum categories for free users
@@ -92,6 +95,9 @@ class TaskViewModel: ObservableObject {
                 // Cancel reminder since task is done
                 NotificationManager.shared.cancelReminder(for: tasks[index])
 
+                // Check for achievements
+                checkForAchievements()
+
                 // Check if all tasks for today are complete
                 checkForConfetti()
             }
@@ -119,6 +125,10 @@ class TaskViewModel: ObservableObject {
 
         categories.append(category)
         saveCategories()
+
+        // Check for organizer achievement
+        checkForAchievements()
+
         return true
     }
 
@@ -203,12 +213,55 @@ class TaskViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Achievement Logic
+
+    /// Check for newly unlocked achievements
+    func checkForAchievements() {
+        let hour = Calendar.current.component(.hour, from: Date())
+
+        let newAchievements = Achievement.checkUnlocks(
+            totalTasksCompleted: settings.totalTasksCompleted,
+            currentStreak: settings.currentStreak,
+            longestStreak: settings.longestStreak,
+            categoryCount: categories.count,
+            isPremium: settings.isPremium,
+            completionHour: hour,
+            alreadyUnlocked: settings.unlockedAchievements
+        )
+
+        // Unlock each new achievement
+        for achievement in newAchievements {
+            unlockAchievement(achievement.id)
+        }
+
+        // Show celebration for the first newly unlocked achievement
+        if let first = newAchievements.first {
+            newlyUnlockedAchievement = first
+        }
+    }
+
+    /// Unlock an achievement by ID
+    func unlockAchievement(_ id: String) {
+        settings.unlockedAchievements.insert(id)
+        saveSettings()
+    }
+
+    /// Clear the newly unlocked achievement (after showing celebration)
+    func clearNewlyUnlockedAchievement() {
+        newlyUnlockedAchievement = nil
+    }
+
     // MARK: - Settings Operations
 
     /// Update premium status
     func setPremiumStatus(_ isPremium: Bool) {
         settings.isPremium = isPremium
         saveSettings()
+
+        // Check for premium achievement
+        if isPremium {
+            checkForAchievements()
+        }
     }
 
     /// Update theme
