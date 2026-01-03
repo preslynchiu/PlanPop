@@ -277,10 +277,26 @@ Getting ready to publish.
   - App name, subtitle, promotional text
   - Full description with features
   - Keywords for search optimization
-- [ ] Create screenshots for different devices
-- [ ] Design promotional artwork
-- [ ] Set up App Store Connect
-- [ ] Configure app privacy details
+- [x] Create screenshots guide
+  - Required sizes: 6.9" iPhone (1320x2868), 5.5" iPhone (1242x2208)
+  - 6 recommended screens: Task List, Challenge, Add Task, Achievements, Insights, Widget
+  - Sample data and captions provided
+- [x] Design promotional artwork guide
+  - Brand colors and pastel palette documented
+  - Design tools recommended (Canva, Figma)
+  - Mockup concepts provided
+- [x] App Store Connect guide
+  - App information, pricing, categories
+  - Full description and keywords ready
+  - In-app purchase configuration
+  - Build upload instructions
+- [x] Configure app privacy details
+  - Privacy questionnaire: "No data collected"
+  - Privacy policy template provided
+  - Age rating: 4+ (no objectionable content)
+- [ ] Take screenshots on device/simulator
+- [ ] Create final promotional artwork
+- [ ] Upload build to App Store Connect
 - [ ] Submit for review
 
 ---
