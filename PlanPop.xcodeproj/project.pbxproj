@@ -22,6 +22,7 @@
 		633D6961EAECA5CC04DD98A5 /* MotivationalQuote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EACF14C1258DF555C512595 /* MotivationalQuote.swift */; };
 		6FC539F9AFC914531E260BCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6ED8EA538816ABE29A379AE4 /* Assets.xcassets */; };
 		76F4AC89AF5BC1E4B8BBEA97 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AA34E95BBA0E0A024551D /* TaskListView.swift */; };
+		8BB8A53725F55721EB593779 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8BD8CA8FA8E026A528ADF3 /* SoundManager.swift */; };
 		8F2D2508207920D28EFB07C8 /* CategoryManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647822A594D1DA2BD22DDC2E /* CategoryManagerView.swift */; };
 		9E7F5EF13D38A877BD715D15 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCD3A0655A2334AD259891C /* ConfettiView.swift */; };
 		A38B519114E782BF8CB2B0BA /* DailyChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474C748D75AC9ED30FA74C17 /* DailyChallenge.swift */; };
@@ -45,6 +46,7 @@
 		10324114EC6A869970DD9A14 /* ProductivityData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductivityData.swift; sourceTree = "<group>"; };
 		1F6E5D446BBB0290ADA86D1D /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		2056DC5FCB73E8580F1751F8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2B8BD8CA8FA8E026A528ADF3 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		3F9C3222879DD81164C28041 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		474C748D75AC9ED30FA74C17 /* DailyChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallenge.swift; sourceTree = "<group>"; };
 		4AD717868A7035C9E82FB286 /* StreakBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakBadge.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 			children = (
 				81892E5041E5E7A563CB0837 /* NotificationManager.swift */,
 				A265CD4102C947536FDE050A /* PersistenceManager.swift */,
+				2B8BD8CA8FA8E026A528ADF3 /* SoundManager.swift */,
 				7CED1A407A6D1A86C86BAAC5 /* StoreManager.swift */,
 			);
 			path = Managers;
@@ -265,6 +268,7 @@
 				281774F61A7A941489559B34 /* PlanPopApp.swift in Sources */,
 				F59A8F0C8962B4E31FD7A4C4 /* ProductivityData.swift in Sources */,
 				1487ABBE57313EB2A53CF193 /* SettingsView.swift in Sources */,
+				8BB8A53725F55721EB593779 /* SoundManager.swift in Sources */,
 				CCA8782FED8784B2D1952C88 /* StoreManager.swift in Sources */,
 				F8432148C5C37CB5B0F5B80C /* StreakBadge.swift in Sources */,
 				36FC77614B64DC1A268E9496 /* Task.swift in Sources */,

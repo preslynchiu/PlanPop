@@ -109,6 +109,9 @@ class TaskViewModel: ObservableObject {
             if tasks[index].isCompleted {
                 let now = Date()
 
+                // Play completion sound
+                SoundManager.shared.playTaskComplete()
+
                 // Record completion timestamp
                 tasks[index].completedAt = now
 
@@ -132,6 +135,9 @@ class TaskViewModel: ObservableObject {
                 // Check if all tasks for today are complete
                 checkForConfetti()
             } else {
+                // Play uncomplete sound
+                SoundManager.shared.playTaskUncomplete()
+
                 // Clear completion timestamp when uncompleting
                 tasks[index].completedAt = nil
             }
@@ -240,6 +246,9 @@ class TaskViewModel: ObservableObject {
         if !todaysTasks.isEmpty && todaysTasks.allSatisfy({ $0.isCompleted }) {
             showConfetti = true
 
+            // Play celebration sound
+            SoundManager.shared.playAllTasksComplete()
+
             // Hide confetti after a delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 self.showConfetti = false
@@ -271,6 +280,9 @@ class TaskViewModel: ObservableObject {
         // Show celebration for the first newly unlocked achievement
         if let first = newAchievements.first {
             newlyUnlockedAchievement = first
+
+            // Play achievement sound
+            SoundManager.shared.playAchievementUnlocked()
         }
     }
 
@@ -327,6 +339,9 @@ class TaskViewModel: ObservableObject {
         if wasCompleted {
             settings.totalChallengesCompleted += 1
             challengeJustCompleted = true
+
+            // Play challenge complete sound
+            SoundManager.shared.playChallengeComplete()
 
             // Auto-hide celebration after delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
