@@ -41,6 +41,17 @@ struct UserSettings: Codable {
     /// Last date when at least one task was completed
     var lastCompletionDate: Date?
 
+    // MARK: - Streak Freeze (Premium Feature)
+
+    /// Number of streak freezes available (premium users get 2/month)
+    var streakFreezeCount: Int = 0
+
+    /// Date when freezes were last refreshed (monthly)
+    var lastFreezeRefreshDate: Date?
+
+    /// Date when a streak freeze was last used (for display)
+    var lastFreezeUsedDate: Date?
+
     // MARK: - App State
 
     /// Has the user completed onboarding?
@@ -88,17 +99,76 @@ extension UserSettings {
     }
 
     /// Check if streak is still valid (called on app launch)
+    /// Uses a streak freeze if available and streak would otherwise break
     mutating func validateStreak() {
+        // First, refresh freezes if needed (for premium users)
+        refreshFreezesIfNeeded()
+
         guard let lastDate = lastCompletionDate else { return }
+        guard currentStreak > 0 else { return }
 
         let today = Calendar.current.startOfDay(for: Date())
         let lastDay = Calendar.current.startOfDay(for: lastDate)
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
 
-        // If last completion wasn't today or yesterday, streak is broken
-        if lastDay != today && lastDay != yesterday {
+        // If last completion was today or yesterday, streak is fine
+        if lastDay == today || lastDay == yesterday {
+            return
+        }
+
+        // Streak would break - check if we can use a freeze
+        let daysSinceLastCompletion = Calendar.current.dateComponents([.day], from: lastDay, to: today).day ?? 0
+
+        // Only use freeze if it's been 2 days (missed exactly 1 day)
+        // Don't use freeze if multiple days missed
+        if daysSinceLastCompletion == 2 && streakFreezeCount > 0 && isPremium {
+            // Use a streak freeze!
+            streakFreezeCount -= 1
+            lastFreezeUsedDate = Date()
+            // Update lastCompletionDate to yesterday so streak continues
+            lastCompletionDate = yesterday
+        } else if daysSinceLastCompletion > 1 {
+            // Streak is broken
             currentStreak = 0
         }
+    }
+
+    /// Refresh streak freezes monthly for premium users (2 per month)
+    mutating func refreshFreezesIfNeeded() {
+        guard isPremium else {
+            // Non-premium users don't get freezes
+            streakFreezeCount = 0
+            return
+        }
+
+        let today = Date()
+        let calendar = Calendar.current
+
+        if let lastRefresh = lastFreezeRefreshDate {
+            // Check if we're in a new month
+            let lastMonth = calendar.component(.month, from: lastRefresh)
+            let lastYear = calendar.component(.year, from: lastRefresh)
+            let currentMonth = calendar.component(.month, from: today)
+            let currentYear = calendar.component(.year, from: today)
+
+            if currentYear > lastYear || currentMonth > lastMonth {
+                // New month - refresh freezes
+                streakFreezeCount = 2
+                lastFreezeRefreshDate = today
+            }
+        } else {
+            // First time - grant freezes
+            streakFreezeCount = 2
+            lastFreezeRefreshDate = today
+        }
+    }
+
+    /// Manually use a streak freeze (for future UI if needed)
+    mutating func useStreakFreeze() -> Bool {
+        guard isPremium && streakFreezeCount > 0 else { return false }
+        streakFreezeCount -= 1
+        lastFreezeUsedDate = Date()
+        return true
     }
 }
 

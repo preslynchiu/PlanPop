@@ -180,6 +180,9 @@ struct SettingsView: View {
                     color: Theme.success
                 )
             }
+
+            // Streak Freeze indicator
+            streakFreezeRow
         }
         .padding()
         .background(Theme.cardBackground)
@@ -187,6 +190,62 @@ struct SettingsView: View {
         .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
         .padding(.horizontal)
         .padding(.vertical, 8)
+    }
+
+    // MARK: - Streak Freeze Row
+
+    private var streakFreezeRow: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "snowflake")
+                .font(.subheadline)
+                .foregroundColor(viewModel.settings.isPremium ? .cyan : Theme.textSecondary)
+
+            if viewModel.settings.isPremium {
+                Text("Streak Freezes:")
+                    .font(.subheadline)
+                    .foregroundColor(Theme.textSecondary)
+
+                // Freeze indicators
+                HStack(spacing: 4) {
+                    ForEach(0..<2, id: \.self) { index in
+                        Circle()
+                            .fill(index < viewModel.settings.streakFreezeCount ? Color.cyan : Color.gray.opacity(0.3))
+                            .frame(width: 12, height: 12)
+                    }
+                }
+
+                Text("\(viewModel.settings.streakFreezeCount)/2")
+                    .font(.caption)
+                    .foregroundColor(Theme.textSecondary)
+
+                Spacer()
+
+                Text("Resets monthly")
+                    .font(.caption2)
+                    .foregroundColor(Theme.textSecondary)
+            } else {
+                Text("Streak Freeze")
+                    .font(.subheadline)
+                    .foregroundColor(Theme.textSecondary)
+
+                Spacer()
+
+                Button {
+                    showingPremiumInfo = true
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "crown.fill")
+                            .font(.caption2)
+                            .foregroundColor(.yellow)
+                        Text("Premium")
+                            .font(.caption)
+                            .foregroundColor(Theme.primary)
+                    }
+                }
+            }
+        }
+        .padding(.top, 8)
+        .padding(.horizontal, 4)
     }
 
     // MARK: - Theme Row
@@ -293,10 +352,10 @@ struct PremiumInfoView: View {
 
                 // Features list
                 VStack(alignment: .leading, spacing: 16) {
+                    PremiumFeatureRow(icon: "snowflake", text: "Streak Freeze (2/month)")
                     PremiumFeatureRow(icon: "paintpalette.fill", text: "All color themes")
                     PremiumFeatureRow(icon: "folder.fill", text: "Unlimited categories")
                     PremiumFeatureRow(icon: "star.fill", text: "Custom task icons")
-                    PremiumFeatureRow(icon: "heart.fill", text: "Support indie development")
                 }
                 .padding(.horizontal, 40)
 
