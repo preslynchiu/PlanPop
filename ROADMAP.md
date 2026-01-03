@@ -201,6 +201,17 @@ Setting up for future monetization.
   - Peak productivity hour and day detection
   - Smart reminder suggestions based on user patterns
 
+- [x] Add motivational quotes
+  - 30 encouraging quotes for students with emojis
+  - Daily rotation based on day of year
+  - Displayed in TaskListView header
+
+- [x] Add daily challenges (gamification)
+  - 6 challenge types: Complete Tasks, Early Bird, Night Owl, Streak Keeper, Category Focus, All Done
+  - DailyChallengeCard component with progress indicator
+  - Auto-refresh daily with new challenge
+  - Track total challenges completed
+
 ---
 
 ## Phase 8: Testing & Polish
@@ -261,6 +272,8 @@ PlanPop/
 │   ├── Category.swift        # Category data model
 │   ├── Achievement.swift     # Achievement badges
 │   ├── ProductivityData.swift    # Analytics tracking
+│   ├── MotivationalQuote.swift   # Daily quotes
+│   ├── DailyChallenge.swift      # Daily challenges
 │   └── UserSettings.swift    # User preferences
 ├── Views/
 │   ├── ContentView.swift     # Main tab container
@@ -280,7 +293,8 @@ PlanPop/
 │   ├── TaskRow.swift         # Single task row
 │   ├── EmptyStateView.swift  # Empty state message
 │   ├── ConfettiView.swift    # Celebration animation
-│   └── StreakBadge.swift     # Streak display
+│   ├── StreakBadge.swift     # Streak display
+│   └── DailyChallengeCard.swift  # Daily challenge card
 ├── Theme/
 │   └── Theme.swift           # Colors and styles
 ├── Products.storekit         # StoreKit configuration
