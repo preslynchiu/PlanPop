@@ -228,6 +228,13 @@ Setting up for future monetization.
   - Pre-fills AddTaskView when accepting suggestions
   - Category suggestions based on usage patterns
 
+- [x] Add home screen widget
+  - WidgetKit extension with App Groups for shared data
+  - Small widget: task count, streak, progress bar
+  - Medium widget: adds next task preview
+  - Auto-refresh every 15 minutes and on task changes
+  - iOS 16+ compatible
+
 ---
 
 ## Phase 8: Testing & Polish
@@ -319,6 +326,11 @@ PlanPop/
 ├── Products.storekit         # StoreKit configuration
 └── Preview Content/
     └── (preview assets)
+
+PlanPopWidget/               # Home screen widget
+├── PlanPopWidgetBundle.swift    # Widget entry point
+├── PlanPopWidget.swift          # Widget provider & views
+└── Assets.xcassets/             # Widget assets
 ```
 
 ---
