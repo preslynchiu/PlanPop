@@ -212,6 +212,14 @@ Setting up for future monetization.
   - Auto-refresh daily with new challenge
   - Track total challenges completed
 
+- [x] Add sound effects and haptic feedback
+  - SoundManager using iOS system sounds
+  - Task completion/uncomplete sounds
+  - Achievement unlocked fanfare
+  - Challenge completed reward sound
+  - All tasks done celebration sound
+  - Haptic feedback for all interactions
+
 ---
 
 ## Phase 8: Testing & Polish
@@ -288,7 +296,8 @@ PlanPop/
 ├── Managers/
 │   ├── PersistenceManager.swift   # Data storage
 │   ├── NotificationManager.swift  # Push notifications
-│   └── StoreManager.swift         # StoreKit 2 purchases
+│   ├── StoreManager.swift         # StoreKit 2 purchases
+│   └── SoundManager.swift         # Sound effects & haptics
 ├── Components/
 │   ├── TaskRow.swift         # Single task row
 │   ├── EmptyStateView.swift  # Empty state message
