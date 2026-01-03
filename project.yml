@@ -42,3 +42,37 @@ targets:
         UIBackgroundModes:
           - remote-notification
         CFBundleDisplayName: "PlanPop"
+    entitlements:
+      path: PlanPop/PlanPop.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.planpop.app
+    dependencies:
+      - target: PlanPopWidgetExtension
+
+  PlanPopWidgetExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: PlanPopWidget
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.planpop.app.widget
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "PlanPop Widget"
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+        ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: "WidgetBackground"
+        SKIP_INSTALL: YES
+    info:
+      path: PlanPopWidget/Info.plist
+      properties:
+        CFBundleDisplayName: "PlanPop Widget"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: PlanPopWidget/PlanPopWidgetExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.planpop.app

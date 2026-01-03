@@ -6,14 +6,18 @@
 //
 
 import Foundation
+import WidgetKit
 
 /// Manages all local data persistence using UserDefaults
 class PersistenceManager {
     // Singleton instance - use PersistenceManager.shared to access
     static let shared = PersistenceManager()
 
-    // UserDefaults instance
-    private let defaults = UserDefaults.standard
+    // App Group identifier for sharing data with widget
+    static let appGroupId = "group.com.planpop.app"
+
+    // UserDefaults instance - uses App Group for widget sharing
+    private let defaults: UserDefaults
 
     // Keys for storing data
     private enum Keys {
@@ -23,7 +27,10 @@ class PersistenceManager {
     }
 
     // Private init for singleton pattern
-    private init() {}
+    private init() {
+        // Use shared UserDefaults for App Group (falls back to standard if group unavailable)
+        self.defaults = UserDefaults(suiteName: PersistenceManager.appGroupId) ?? .standard
+    }
 
     // MARK: - Tasks
 
@@ -32,6 +39,9 @@ class PersistenceManager {
         do {
             let data = try JSONEncoder().encode(tasks)
             defaults.set(data, forKey: Keys.tasks)
+
+            // Refresh widget when tasks change
+            WidgetCenter.shared.reloadTimelines(ofKind: "PlanPopWidget")
         } catch {
             print("Error saving tasks: \(error)")
         }
@@ -87,6 +97,9 @@ class PersistenceManager {
         do {
             let data = try JSONEncoder().encode(settings)
             defaults.set(data, forKey: Keys.settings)
+
+            // Refresh widget when settings change (streak updates)
+            WidgetCenter.shared.reloadTimelines(ofKind: "PlanPopWidget")
         } catch {
             print("Error saving settings: \(error)")
         }
