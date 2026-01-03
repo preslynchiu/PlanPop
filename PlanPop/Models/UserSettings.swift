@@ -100,7 +100,11 @@ extension UserSettings {
                 return
             }
 
-            let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
+            guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) else {
+                // Calendar error, start fresh
+                currentStreak = 1
+                return
+            }
             if lastDay == yesterday {
                 // Completed yesterday, continue streak!
                 currentStreak += 1
@@ -132,7 +136,11 @@ extension UserSettings {
 
         let today = Calendar.current.startOfDay(for: Date())
         let lastDay = Calendar.current.startOfDay(for: lastDate)
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
+        guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) else {
+            // Calendar error, reset streak to be safe
+            currentStreak = 0
+            return
+        }
 
         // If last completion was today or yesterday, streak is fine
         if lastDay == today || lastDay == yesterday {
@@ -220,7 +228,7 @@ enum AppTheme: String, CaseIterable, Codable {
     /// Whether this is a premium theme
     var isPremiumOnly: Bool {
         switch self {
-        case .pastelPink, .light:
+        case .pastelPink, .light, .dark:
             return false
         default:
             return true

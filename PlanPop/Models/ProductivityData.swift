@@ -89,16 +89,20 @@ struct ProductivityData: Codable, Equatable {
     static func hourString(for hour: Int) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "h a"
-        var components = DateComponents()
+        // Use today's date as base, then set the hour
+        var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         components.hour = hour
-        guard let date = Calendar.current.date(from: components) else { return "" }
+        components.minute = 0
+        guard let date = Calendar.current.date(from: components) else { return "\(hour):00" }
         return formatter.string(from: date)
     }
 
     /// Tasks completed this week
     var completedThisWeek: Int {
         let calendar = Calendar.current
-        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+        guard let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())) else {
+            return 0
+        }
         return dailyLogs
             .filter { $0.date >= startOfWeek }
             .reduce(0) { $0 + $1.completedCount }
@@ -107,8 +111,10 @@ struct ProductivityData: Codable, Equatable {
     /// Tasks completed last week
     var completedLastWeek: Int {
         let calendar = Calendar.current
-        let startOfThisWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
-        let startOfLastWeek = calendar.date(byAdding: .weekOfYear, value: -1, to: startOfThisWeek)!
+        guard let startOfThisWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())),
+              let startOfLastWeek = calendar.date(byAdding: .weekOfYear, value: -1, to: startOfThisWeek) else {
+            return 0
+        }
         return dailyLogs
             .filter { $0.date >= startOfLastWeek && $0.date < startOfThisWeek }
             .reduce(0) { $0 + $1.completedCount }
@@ -117,7 +123,9 @@ struct ProductivityData: Codable, Equatable {
     /// Tasks completed this month
     var completedThisMonth: Int {
         let calendar = Calendar.current
-        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date()))!
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date())) else {
+            return 0
+        }
         return dailyLogs
             .filter { $0.date >= startOfMonth }
             .reduce(0) { $0 + $1.completedCount }

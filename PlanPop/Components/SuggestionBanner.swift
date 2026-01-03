@@ -15,12 +15,18 @@ struct SuggestionBanner: View {
 
     @State private var currentIndex = 0
 
+    /// Safely get current suggestion with bounds checking
+    private var currentSuggestion: TaskSuggestion? {
+        guard currentIndex >= 0 && currentIndex < suggestions.count else { return nil }
+        return suggestions[currentIndex]
+    }
+
     var body: some View {
-        if !suggestions.isEmpty {
+        if let suggestion = currentSuggestion {
             VStack(spacing: 0) {
                 HStack(spacing: 12) {
                     // Lightbulb icon
-                    Image(systemName: suggestions[currentIndex].icon)
+                    Image(systemName: suggestion.icon)
                         .font(.title3)
                         .foregroundColor(Theme.primary)
                         .frame(width: 32, height: 32)
@@ -29,12 +35,12 @@ struct SuggestionBanner: View {
 
                     // Suggestion content
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(suggestions[currentIndex].title)
+                        Text(suggestion.title)
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundColor(Theme.textPrimary)
 
-                        Text(suggestions[currentIndex].reason)
+                        Text(suggestion.reason)
                             .font(.caption)
                             .foregroundColor(Theme.textSecondary)
                     }
@@ -46,7 +52,7 @@ struct SuggestionBanner: View {
                         // Add button
                         Button(action: {
                             SoundManager.shared.playButtonTap()
-                            onAccept(suggestions[currentIndex])
+                            onAccept(suggestion)
                         }) {
                             Image(systemName: "plus.circle.fill")
                                 .font(.title2)

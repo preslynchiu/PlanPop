@@ -7,9 +7,10 @@
 
 import Foundation
 import WidgetKit
+import Combine
 
 /// Manages all local data persistence using UserDefaults
-class PersistenceManager {
+class PersistenceManager: ObservableObject {
     // Singleton instance - use PersistenceManager.shared to access
     static let shared = PersistenceManager()
 
@@ -19,6 +20,9 @@ class PersistenceManager {
     // UserDefaults instance - uses App Group for widget sharing
     private let defaults: UserDefaults
 
+    // Published error for UI to observe and display
+    @Published var lastError: PersistenceError?
+
     // Keys for storing data
     private enum Keys {
         static let tasks = "planpop_tasks"
@@ -26,10 +30,30 @@ class PersistenceManager {
         static let settings = "planpop_settings"
     }
 
+    /// Errors that can occur during persistence operations
+    enum PersistenceError: LocalizedError {
+        case saveFailed(String)
+        case loadFailed(String)
+
+        var errorDescription: String? {
+            switch self {
+            case .saveFailed(let detail):
+                return "Failed to save data: \(detail)"
+            case .loadFailed(let detail):
+                return "Failed to load data: \(detail)"
+            }
+        }
+    }
+
     // Private init for singleton pattern
     private init() {
         // Use shared UserDefaults for App Group (falls back to standard if group unavailable)
         self.defaults = UserDefaults(suiteName: PersistenceManager.appGroupId) ?? .standard
+    }
+
+    /// Clear any displayed error
+    func clearError() {
+        lastError = nil
     }
 
     // MARK: - Tasks
@@ -44,6 +68,7 @@ class PersistenceManager {
             WidgetCenter.shared.reloadTimelines(ofKind: "PlanPopWidget")
         } catch {
             print("Error saving tasks: \(error)")
+            lastError = .saveFailed("Tasks could not be saved. Please try again.")
         }
     }
 
@@ -58,6 +83,7 @@ class PersistenceManager {
             return tasks
         } catch {
             print("Error loading tasks: \(error)")
+            lastError = .loadFailed("Tasks could not be loaded. Some data may be lost.")
             return []
         }
     }
@@ -71,6 +97,7 @@ class PersistenceManager {
             defaults.set(data, forKey: Keys.categories)
         } catch {
             print("Error saving categories: \(error)")
+            lastError = .saveFailed("Categories could not be saved. Please try again.")
         }
     }
 
@@ -86,6 +113,7 @@ class PersistenceManager {
             return categories
         } catch {
             print("Error loading categories: \(error)")
+            lastError = .loadFailed("Categories could not be loaded. Using defaults.")
             return Category.defaultCategories
         }
     }
@@ -102,6 +130,7 @@ class PersistenceManager {
             WidgetCenter.shared.reloadTimelines(ofKind: "PlanPopWidget")
         } catch {
             print("Error saving settings: \(error)")
+            lastError = .saveFailed("Settings could not be saved. Please try again.")
         }
     }
 
@@ -118,8 +147,16 @@ class PersistenceManager {
             return settings
         } catch {
             print("Error loading settings: \(error)")
+            lastError = .loadFailed("Settings could not be loaded. Using defaults.")
             return UserSettings()
         }
+    }
+
+    /// Atomically update settings with a closure to prevent race conditions
+    func updateSettings(_ update: (inout UserSettings) -> Void) {
+        var settings = loadSettings()
+        update(&settings)
+        saveSettings(settings)
     }
 
     // MARK: - Utility

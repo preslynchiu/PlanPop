@@ -70,8 +70,7 @@ class TaskViewModel: ObservableObject {
 
     /// Add a new task
     func addTask(_ task: Task) {
-        var newTask = task
-        tasks.append(newTask)
+        tasks.append(task)
         saveTasks()
 
         // Record pattern for suggestions
@@ -82,8 +81,8 @@ class TaskViewModel: ObservableObject {
         saveSettings()
 
         // Schedule notification if needed
-        if newTask.hasReminder {
-            NotificationManager.shared.scheduleReminder(for: newTask)
+        if task.hasReminder {
+            NotificationManager.shared.scheduleReminder(for: task)
         }
     }
 
@@ -265,8 +264,8 @@ class TaskViewModel: ObservableObject {
             SoundManager.shared.playAllTasksComplete()
 
             // Hide confetti after a delay
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                self.showConfetti = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+                self?.showConfetti = false
             }
         }
     }
@@ -359,8 +358,8 @@ class TaskViewModel: ObservableObject {
             SoundManager.shared.playChallengeComplete()
 
             // Auto-hide celebration after delay
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                self.challengeJustCompleted = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+                self?.challengeJustCompleted = false
             }
         }
 

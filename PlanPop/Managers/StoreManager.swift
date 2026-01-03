@@ -251,10 +251,11 @@ class StoreManager: ObservableObject {
 
     /// Sync premium status with PersistenceManager/UserSettings
     private func syncPremiumStatusWithSettings(_ isPremium: Bool) {
-        var settings = PersistenceManager.shared.loadSettings()
-        if settings.isPremium != isPremium {
-            settings.isPremium = isPremium
-            PersistenceManager.shared.saveSettings(settings)
+        // Use atomic update to prevent race conditions
+        PersistenceManager.shared.updateSettings { settings in
+            if settings.isPremium != isPremium {
+                settings.isPremium = isPremium
+            }
         }
     }
 

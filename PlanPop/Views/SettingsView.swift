@@ -157,15 +157,17 @@ struct SettingsView: View {
                                 .foregroundColor(Theme.textSecondary)
                         }
 
-                        Link(destination: URL(string: "https://example.com/privacy")!) {
-                            HStack {
-                                Text("Privacy Policy")
-                                Spacer()
-                                Image(systemName: "arrow.up.right")
-                                    .font(.caption)
+                        if let privacyURL = URL(string: "https://example.com/privacy") {
+                            Link(destination: privacyURL) {
+                                HStack {
+                                    Text("Privacy Policy")
+                                    Spacer()
+                                    Image(systemName: "arrow.up.right")
+                                        .font(.caption)
+                                }
                             }
+                            .foregroundColor(Theme.textPrimary)
                         }
-                        .foregroundColor(Theme.textPrimary)
                     }
 
                     // Debug section (remove in production)
@@ -411,7 +413,7 @@ struct PremiumInfoView: View {
                 // Features list
                 VStack(alignment: .leading, spacing: 16) {
                     PremiumFeatureRow(icon: "snowflake", text: "Streak Freeze (2/month)")
-                    PremiumFeatureRow(icon: "paintpalette.fill", text: "All color themes")
+                    PremiumFeatureRow(icon: "paintpalette.fill", text: "Exclusive pastel themes")
                     PremiumFeatureRow(icon: "folder.fill", text: "Unlimited categories")
                     PremiumFeatureRow(icon: "star.fill", text: "Custom task icons")
                 }

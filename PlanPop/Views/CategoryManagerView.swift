@@ -87,8 +87,10 @@ struct CategoryManagerView: View {
     }
 
     private func deleteCategories(at offsets: IndexSet) {
-        for index in offsets {
-            viewModel.deleteCategory(viewModel.categories[index])
+        // Collect categories to delete first to avoid index invalidation
+        let categoriesToDelete = offsets.map { viewModel.categories[$0] }
+        for category in categoriesToDelete {
+            viewModel.deleteCategory(category)
         }
     }
 }

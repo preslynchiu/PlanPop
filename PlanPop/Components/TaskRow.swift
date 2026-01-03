@@ -29,12 +29,14 @@ struct TaskRow: View {
         HStack(spacing: 12) {
             // Checkbox button
             Button(action: {
-                // Trigger haptic feedback
+                // Trigger haptic feedback (prepare for immediate feedback)
                 if task.isCompleted {
                     // Light tap when uncompleting
+                    impactFeedback.prepare()
                     impactFeedback.impactOccurred()
                 } else {
                     // Success feedback when completing
+                    successFeedback.prepare()
                     successFeedback.notificationOccurred(.success)
                 }
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
