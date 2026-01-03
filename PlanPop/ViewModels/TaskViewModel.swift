@@ -387,6 +387,9 @@ class TaskViewModel: ObservableObject {
         }
         settings.themeName = theme.rawValue
         saveSettings()
+
+        // Notify ThemeManager to update all views
+        ThemeManager.shared.setTheme(theme)
     }
 
     // MARK: - Persistence Helpers

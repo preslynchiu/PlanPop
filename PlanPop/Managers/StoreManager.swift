@@ -8,6 +8,9 @@
 import Foundation
 import StoreKit
 
+/// Type alias to disambiguate from app's Task model
+private typealias ConcurrencyTask = _Concurrency.Task
+
 /// Purchase states for UI feedback
 enum PurchaseState: Equatable {
     case idle
@@ -16,11 +19,12 @@ enum PurchaseState: Equatable {
     case purchased
     case failed(String)
     case pending
+    case restored  // New state to distinguish successful restore
 
     static func == (lhs: PurchaseState, rhs: PurchaseState) -> Bool {
         switch (lhs, rhs) {
         case (.idle, .idle), (.loading, .loading), (.purchasing, .purchasing),
-             (.purchased, .purchased), (.pending, .pending):
+             (.purchased, .purchased), (.pending, .pending), (.restored, .restored):
             return true
         case (.failed(let a), .failed(let b)):
             return a == b
@@ -37,22 +41,25 @@ enum StoreError: LocalizedError {
     case verificationFailed
     case userCancelled
     case networkError
+    case purchaseInProgress
     case unknown
 
     var errorDescription: String? {
         switch self {
         case .productNotFound:
-            return "The product could not be found."
+            return "The product could not be found. Please try again later."
         case .purchaseFailed:
-            return "The purchase could not be completed."
+            return "The purchase could not be completed. Please try again."
         case .verificationFailed:
-            return "The purchase could not be verified."
+            return "The purchase could not be verified. Please contact support."
         case .userCancelled:
             return "The purchase was cancelled."
         case .networkError:
-            return "Please check your internet connection."
+            return "Please check your internet connection and try again."
+        case .purchaseInProgress:
+            return "A purchase is already in progress."
         case .unknown:
-            return "An unknown error occurred."
+            return "An unknown error occurred. Please try again."
         }
     }
 }
@@ -87,18 +94,30 @@ class StoreManager: ObservableObject {
     // MARK: - Private Properties
 
     /// Transaction listener task
-    private var transactionListener: _Concurrency.Task<Void, Error>?
+    private var transactionListener: ConcurrencyTask<Void, Never>?
+
+    /// Flag to prevent concurrent status updates
+    private var isUpdatingStatus: Bool = false
+
+    /// Flag to prevent concurrent purchases
+    private var isPurchasing: Bool = false
+
+    /// Retry count for product loading
+    private var productLoadRetryCount: Int = 0
+    private let maxProductLoadRetries: Int = 3
 
     // MARK: - Initialization
 
     private init() {
-        // Start listening for transactions immediately
-        transactionListener = listenForTransactions()
+        // Start listening for transactions on MainActor
+        transactionListener = ConcurrencyTask { [weak self] in
+            await self?.listenForTransactions()
+        }
 
         // Load products and check entitlements on init
-        _Concurrency.Task {
-            await loadProducts()
-            await updatePurchasedStatus()
+        ConcurrencyTask { [weak self] in
+            await self?.loadProducts()
+            await self?.updatePurchasedStatus()
         }
     }
 
@@ -108,35 +127,77 @@ class StoreManager: ObservableObject {
 
     // MARK: - Product Loading
 
-    /// Load products from App Store
+    /// Load products from App Store with retry mechanism
     func loadProducts() async {
-        purchaseState = .loading
+        // Don't show loading state on retry
+        if productLoadRetryCount == 0 {
+            purchaseState = .loading
+        }
 
         do {
             let products = try await Product.products(for: [Self.premiumLifetimeID])
 
             if let product = products.first {
+                // Validate that product ID matches what we expect
+                guard product.id == Self.premiumLifetimeID else {
+                    purchaseState = .failed(StoreError.productNotFound.localizedDescription)
+                    return
+                }
                 premiumProduct = product
                 purchaseState = .idle
+                productLoadRetryCount = 0  // Reset retry count on success
             } else {
                 purchaseState = .failed(StoreError.productNotFound.localizedDescription)
             }
         } catch {
-            purchaseState = .failed(StoreError.networkError.localizedDescription)
             print("Failed to load products: \(error)")
+
+            // Retry with exponential backoff
+            if productLoadRetryCount < maxProductLoadRetries {
+                productLoadRetryCount += 1
+                let delay = UInt64(pow(2.0, Double(productLoadRetryCount))) * 1_000_000_000  // seconds to nanoseconds
+                try? await ConcurrencyTask<Never, Never>.sleep(nanoseconds: delay)
+                await loadProducts()
+            } else {
+                purchaseState = .failed(StoreError.networkError.localizedDescription)
+                productLoadRetryCount = 0  // Reset for manual retry
+            }
         }
+    }
+
+    /// Manually retry loading products
+    func retryLoadProducts() async {
+        productLoadRetryCount = 0
+        await loadProducts()
     }
 
     // MARK: - Purchase
 
     /// Purchase the premium lifetime unlock
     func purchasePremium() async {
+        // Guard against double purchase
+        guard !isPurchasing else {
+            purchaseState = .failed(StoreError.purchaseInProgress.localizedDescription)
+            return
+        }
+
+        // Already premium? Don't purchase again
+        guard !isPremiumPurchased else {
+            purchaseState = .purchased
+            return
+        }
+
         guard let product = premiumProduct else {
             purchaseState = .failed(StoreError.productNotFound.localizedDescription)
             return
         }
 
+        isPurchasing = true
         purchaseState = .purchasing
+
+        defer {
+            isPurchasing = false
+        }
 
         do {
             let result = try await product.purchase()
@@ -146,13 +207,21 @@ class StoreManager: ObservableObject {
                 // Verify the transaction
                 let transaction = try checkVerified(verification)
 
-                // Update premium status
+                // Update premium status BEFORE finishing transaction
+                // to ensure we persist the purchase
                 await updatePurchasedStatus()
 
-                // Finish the transaction
-                await transaction.finish()
-
-                purchaseState = .purchased
+                // Only finish transaction after confirming status update
+                if isPremiumPurchased {
+                    await transaction.finish()
+                    purchaseState = .purchased
+                } else {
+                    // Status didn't update - try direct sync
+                    isPremiumPurchased = true
+                    syncPremiumStatusWithSettings(true)
+                    await transaction.finish()
+                    purchaseState = .purchased
+                }
 
             case .userCancelled:
                 purchaseState = .idle
@@ -165,7 +234,7 @@ class StoreManager: ObservableObject {
                 purchaseState = .failed(StoreError.unknown.localizedDescription)
             }
         } catch {
-            purchaseState = .failed(error.localizedDescription)
+            purchaseState = .failed(StoreError.purchaseFailed.localizedDescription)
             print("Purchase failed: \(error)")
         }
     }
@@ -174,6 +243,12 @@ class StoreManager: ObservableObject {
 
     /// Restore previous purchases
     func restorePurchases() async {
+        // Already premium? Just confirm
+        if isPremiumPurchased {
+            purchaseState = .purchased
+            return
+        }
+
         purchaseState = .loading
 
         do {
@@ -184,12 +259,13 @@ class StoreManager: ObservableObject {
             await updatePurchasedStatus()
 
             if isPremiumPurchased {
-                purchaseState = .purchased
+                purchaseState = .restored
             } else {
+                // Restore succeeded but no purchases found
                 purchaseState = .idle
             }
         } catch {
-            purchaseState = .failed(error.localizedDescription)
+            purchaseState = .failed("Could not connect to App Store. Please check your connection and try again.")
             print("Restore failed: \(error)")
         }
     }
@@ -198,39 +274,57 @@ class StoreManager: ObservableObject {
 
     /// Update the purchased status by checking current entitlements
     func updatePurchasedStatus() async {
+        // Prevent concurrent updates
+        guard !isUpdatingStatus else { return }
+        isUpdatingStatus = true
+
+        defer {
+            isUpdatingStatus = false
+        }
+
         // Check for existing verified transaction
         for await result in Transaction.currentEntitlements {
             if case .verified(let transaction) = result {
                 if transaction.productID == Self.premiumLifetimeID {
-                    isPremiumPurchased = true
-                    // Sync with UserSettings
-                    syncPremiumStatusWithSettings(true)
+                    // Only update if different to prevent unnecessary saves
+                    if !isPremiumPurchased {
+                        isPremiumPurchased = true
+                        syncPremiumStatusWithSettings(true)
+                    }
                     return
                 }
             }
         }
 
-        isPremiumPurchased = false
-        syncPremiumStatusWithSettings(false)
+        // No premium entitlement found
+        if isPremiumPurchased {
+            isPremiumPurchased = false
+            syncPremiumStatusWithSettings(false)
+        }
     }
 
     // MARK: - Transaction Listener
 
     /// Listen for transaction updates (handles Ask to Buy, family sharing, etc.)
-    private func listenForTransactions() -> _Concurrency.Task<Void, Error> {
-        return _Concurrency.Task.detached {
-            for await result in Transaction.updates {
-                do {
-                    let transaction = try await self.checkVerified(result)
+    private func listenForTransactions() async {
+        // Listen on MainActor to avoid threading issues
+        for await result in Transaction.updates {
+            do {
+                let transaction = try checkVerified(result)
 
-                    // Update purchase status on main actor
-                    await self.updatePurchasedStatus()
+                // Update purchase status
+                await updatePurchasedStatus()
 
-                    // Finish the transaction
-                    await transaction.finish()
-                } catch {
-                    print("Transaction verification failed: \(error)")
+                // Finish the transaction
+                await transaction.finish()
+
+                // Update UI state if we became premium
+                if isPremiumPurchased && purchaseState != .purchased {
+                    purchaseState = .purchased
                 }
+            } catch {
+                print("Transaction verification failed: \(error)")
+                // Don't finish unverified transactions
             }
         }
     }

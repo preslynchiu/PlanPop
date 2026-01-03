@@ -6,26 +6,84 @@
 //
 
 import SwiftUI
+import Combine
+
+// MARK: - Theme Manager (Observable)
+
+/// Manages the current theme and notifies views of changes
+class ThemeManager: ObservableObject {
+    static let shared = ThemeManager()
+
+    @Published var currentTheme: AppTheme = .pastelPink
+
+    private init() {
+        // Load saved theme from UserDefaults
+        loadSavedTheme()
+    }
+
+    func loadSavedTheme() {
+        let settings = PersistenceManager.shared.loadSettings()
+        if let theme = AppTheme(rawValue: settings.themeName) {
+            currentTheme = theme
+        }
+    }
+
+    func setTheme(_ theme: AppTheme) {
+        currentTheme = theme
+    }
+
+    // MARK: - Current Theme Colors (Computed)
+
+    var colors: ThemeColors {
+        Theme.colors(for: currentTheme)
+    }
+
+    var primary: Color { colors.primary }
+    var secondary: Color { colors.secondary }
+    var themeBackground: Color { colors.background }
+    var accent: Color { colors.accent }
+
+    var isDarkTheme: Bool {
+        currentTheme == .dark
+    }
+
+    var cardBackground: Color {
+        isDarkTheme ? Color(hex: "#2C2C2E") : Color.white
+    }
+
+    var textPrimary: Color {
+        isDarkTheme ? Color.white : Color(hex: "#4A4A4A")
+    }
+
+    var textSecondary: Color {
+        isDarkTheme ? Color(hex: "#EBEBF5").opacity(0.6) : Color(hex: "#767676")
+    }
+}
 
 /// App-wide theme and color definitions
 struct Theme {
-    // MARK: - Pastel Color Palette
+    // MARK: - Shared Theme Manager
 
-    /// Primary accent color (soft pink)
-    static let primary = Color(hex: "#FF9EAA")
+    static var current: ThemeManager { ThemeManager.shared }
 
-    /// Secondary accent color (soft purple)
-    static let secondary = Color(hex: "#C4B0FF")
+    // MARK: - Legacy Static Colors (for backwards compatibility during migration)
+    // These now read from the current theme
 
-    /// Background color (very light pink/cream)
-    static let background = Color(hex: "#FFF5F5")
+    /// Primary accent color
+    static var primary: Color { current.primary }
+
+    /// Secondary accent color
+    static var secondary: Color { current.secondary }
+
+    /// Background color
+    static var background: Color { current.themeBackground }
 
     /// Card/surface background
-    static let cardBackground = Color.white
+    static var cardBackground: Color { current.cardBackground }
 
     /// Text colors
-    static let textPrimary = Color(hex: "#4A4A4A")
-    static let textSecondary = Color(hex: "#767676") // WCAG AA compliant (4.5:1 contrast)
+    static var textPrimary: Color { current.textPrimary }
+    static var textSecondary: Color { current.textSecondary }
 
     /// Success color (soft green)
     static let success = Color(hex: "#A8E6CF")

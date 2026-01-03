@@ -12,6 +12,9 @@ struct ContentView: View {
     // Shared view model
     @StateObject private var viewModel = TaskViewModel()
 
+    // Theme manager for observing theme changes
+    @ObservedObject private var themeManager = ThemeManager.shared
+
     // Currently selected tab
     @State private var selectedTab = 0
 
@@ -33,8 +36,10 @@ struct ContentView: View {
                 }
                 .tag(1)
         }
-        .tint(Theme.primary)
+        .tint(themeManager.primary)
         .environmentObject(viewModel)
+        .environmentObject(themeManager)
+        .preferredColorScheme(themeManager.isDarkTheme ? .dark : .light)
         .confetti(isShowing: $viewModel.showConfetti)
         .alert("Achievement Unlocked!", isPresented: .init(
             get: { viewModel.newlyUnlockedAchievement != nil },
@@ -63,6 +68,8 @@ struct ContentView: View {
             UITabBar.appearance().standardAppearance = appearance
             UITabBar.appearance().scrollEdgeAppearance = appearance
         }
+        // Force view refresh when theme changes
+        .id(themeManager.currentTheme)
     }
 }
 
