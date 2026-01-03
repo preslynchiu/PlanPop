@@ -189,20 +189,20 @@ Making sure everything works perfectly.
 
 ### Testing Checklist
 
-- [ ] Test adding a new task
-- [ ] Test editing an existing task
-- [ ] Test marking tasks complete/incomplete
-- [ ] Test deleting tasks
-- [ ] Test filter buttons work correctly
-- [ ] Test categories can be created/edited/deleted
-- [ ] Test category limit for free users
-- [ ] Test streak increments correctly
-- [ ] Test streak resets after missing a day
-- [ ] Test confetti shows when all tasks done
-- [ ] Test notifications fire at correct time
-- [ ] Test data persists after closing app
-- [ ] Test empty states show correctly
-- [ ] Test on different iPhone sizes
+- [x] Test adding a new task
+- [x] Test editing an existing task
+- [x] Test marking tasks complete/incomplete
+- [x] Test deleting tasks
+- [x] Test filter buttons work correctly
+- [x] Test categories can be created/edited/deleted
+- [x] Test category limit for free users
+- [x] Test streak increments correctly
+- [x] Test streak resets after missing a day
+- [x] Test confetti shows when all tasks done
+- [x] Test notifications fire at correct time
+- [x] Test data persists after closing app
+- [x] Test empty states show correctly
+- [x] Test on different iPhone sizes
 
 ### Polish Checklist
 
