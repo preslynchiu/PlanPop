@@ -181,6 +181,18 @@ Setting up for future monetization.
   - Icon picker in AddTaskView (premium-gated)
   - Display icons in TaskRow
 
+- [x] Add streak freeze (premium feature)
+  - 2 freezes per month for premium users
+  - Auto-refresh monthly
+  - Auto-use when missing exactly 1 day
+  - Display in Settings stats card
+
+- [x] Add achievement badges (gamification)
+  - 11 achievements across 4 categories (Tasks, Streaks, Time, Special)
+  - AchievementsView with grid layout and progress tracking
+  - Auto-unlock on task completion, category creation, premium upgrade
+  - Celebration alert when achievement unlocked
+
 ---
 
 ## Phase 8: Testing & Polish
@@ -219,7 +231,10 @@ Making sure everything works perfectly.
 
 Getting ready to publish.
 
-- [ ] Write app description
+- [x] Write app description
+  - App name, subtitle, promotional text
+  - Full description with features
+  - Keywords for search optimization
 - [ ] Create screenshots for different devices
 - [ ] Design promotional artwork
 - [ ] Set up App Store Connect
@@ -236,18 +251,21 @@ PlanPop/
 ├── Models/
 │   ├── Task.swift            # Task data model
 │   ├── Category.swift        # Category data model
+│   ├── Achievement.swift     # Achievement badges
 │   └── UserSettings.swift    # User preferences
 ├── Views/
 │   ├── ContentView.swift     # Main tab container
 │   ├── TaskListView.swift    # Task list screen
 │   ├── AddTaskView.swift     # Add/edit task form
 │   ├── SettingsView.swift    # Settings screen
-│   └── CategoryManagerView.swift  # Manage categories
+│   ├── CategoryManagerView.swift  # Manage categories
+│   └── AchievementsView.swift     # Achievement badges grid
 ├── ViewModels/
 │   └── TaskViewModel.swift   # Business logic
 ├── Managers/
 │   ├── PersistenceManager.swift   # Data storage
-│   └── NotificationManager.swift  # Push notifications
+│   ├── NotificationManager.swift  # Push notifications
+│   └── StoreManager.swift         # StoreKit 2 purchases
 ├── Components/
 │   ├── TaskRow.swift         # Single task row
 │   ├── EmptyStateView.swift  # Empty state message
@@ -255,6 +273,7 @@ PlanPop/
 │   └── StreakBadge.swift     # Streak display
 ├── Theme/
 │   └── Theme.swift           # Colors and styles
+├── Products.storekit         # StoreKit configuration
 └── Preview Content/
     └── (preview assets)
 ```
