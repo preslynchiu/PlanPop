@@ -15,6 +15,7 @@ struct SettingsView: View {
     @State private var showingCategoryManager = false
     @State private var showingPremiumInfo = false
     @State private var showingAchievements = false
+    @State private var showingInsights = false
     @State private var notificationsEnabled = false
 
     var body: some View {
@@ -67,8 +68,29 @@ struct SettingsView: View {
                         .foregroundColor(Theme.textPrimary)
                     }
 
+                    // Insights section
+                    Section("Insights") {
+                        Button {
+                            showingInsights = true
+                        } label: {
+                            HStack {
+                                Label("View Productivity", systemImage: "chart.line.uptrend.xyaxis")
+                                Spacer()
+                                if let peakHour = viewModel.settings.productivityData.peakHour {
+                                    Text("Peak: \(ProductivityData.hourString(for: peakHour))")
+                                        .font(.caption)
+                                        .foregroundColor(Theme.textSecondary)
+                                }
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(Theme.textSecondary)
+                            }
+                        }
+                        .foregroundColor(Theme.textPrimary)
+                    }
+
                     // Notifications section
-                    Section("Notifications") {
+                    Section {
                         Toggle("Enable Reminders", isOn: $notificationsEnabled)
                             .onChange(of: notificationsEnabled) { newValue in
                                 if newValue {
@@ -76,6 +98,17 @@ struct SettingsView: View {
                                 }
                                 viewModel.settings.notificationsEnabled = newValue
                             }
+                    } header: {
+                        Text("Notifications")
+                    } footer: {
+                        if let peakHour = viewModel.settings.productivityData.peakHour {
+                            HStack(spacing: 4) {
+                                Image(systemName: "lightbulb.fill")
+                                    .foregroundColor(.yellow)
+                                Text("You're most productive at \(ProductivityData.hourString(for: peakHour))")
+                            }
+                            .font(.caption)
+                        }
                     }
 
                     // Theme section
@@ -166,6 +199,9 @@ struct SettingsView: View {
             }
             .sheet(isPresented: $showingAchievements) {
                 AchievementsView()
+            }
+            .sheet(isPresented: $showingInsights) {
+                InsightsView()
             }
             .onAppear {
                 checkNotificationStatus()

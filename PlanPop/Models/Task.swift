@@ -21,6 +21,9 @@ struct Task: Identifiable, Codable, Equatable {
     // Is the task completed?
     var isCompleted: Bool = false
 
+    // When was the task completed? (for analytics)
+    var completedAt: Date?
+
     // When was this task created?
     var createdAt: Date = Date()
 

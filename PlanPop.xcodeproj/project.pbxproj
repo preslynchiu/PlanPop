@@ -15,6 +15,7 @@
 		281774F61A7A941489559B34 /* PlanPopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59FF47037ADCA8330A3DA903 /* PlanPopApp.swift */; };
 		3192676AD13B419E3AACB9B6 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBB0E0527D4ED05BB802E71 /* UserSettings.swift */; };
 		36FC77614B64DC1A268E9496 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9C3222879DD81164C28041 /* Task.swift */; };
+		3BF91D0CBB9F8861854DBEC6 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0444DBD1EC985F0E73B3C7 /* InsightsView.swift */; };
 		3BFA523A13F6E08F48B4EDFD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC52A8A7C2DA92FD5EE4D39A /* Theme.swift */; };
 		47FE66688BE35DC56C3EF8D0 /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DACA0B1DE9FA867F5AD03A8 /* AchievementsView.swift */; };
 		5342235FE48BE0C7C24BA3E2 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099770BC48EFF2C0F8FCF17 /* AddTaskView.swift */; };
@@ -28,14 +29,17 @@
 		D3109DB8D1564DBB0FCDA795 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5979AC4D327F6D16A52AE97F /* Preview Assets.xcassets */; };
 		E95C79D1E682BEA6CA2A722F /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1CE557BC9C8185643C1A6CF /* Achievement.swift */; };
 		EFDD813FF04A88E701D59054 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81892E5041E5E7A563CB0837 /* NotificationManager.swift */; };
+		F59A8F0C8962B4E31FD7A4C4 /* ProductivityData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10324114EC6A869970DD9A14 /* ProductivityData.swift */; };
 		F8432148C5C37CB5B0F5B80C /* StreakBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD717868A7035C9E82FB286 /* StreakBadge.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0445E6CA91207C5BAB5C89B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		057AA34E95BBA0E0A024551D /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
+		0B0444DBD1EC985F0E73B3C7 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
 		0CE9D54CA2BCE406BD1FDD92 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		0EEFA423D3293A4F87EDB3A5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		10324114EC6A869970DD9A14 /* ProductivityData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductivityData.swift; sourceTree = "<group>"; };
 		1F6E5D446BBB0290ADA86D1D /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		2056DC5FCB73E8580F1751F8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3F9C3222879DD81164C28041 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -75,6 +79,7 @@
 			children = (
 				F1CE557BC9C8185643C1A6CF /* Achievement.swift */,
 				0CE9D54CA2BCE406BD1FDD92 /* Category.swift */,
+				10324114EC6A869970DD9A14 /* ProductivityData.swift */,
 				3F9C3222879DD81164C28041 /* Task.swift */,
 				7BBB0E0527D4ED05BB802E71 /* UserSettings.swift */,
 			);
@@ -130,6 +135,7 @@
 				A099770BC48EFF2C0F8FCF17 /* AddTaskView.swift */,
 				647822A594D1DA2BD22DDC2E /* CategoryManagerView.swift */,
 				0EEFA423D3293A4F87EDB3A5 /* ContentView.swift */,
+				0B0444DBD1EC985F0E73B3C7 /* InsightsView.swift */,
 				2056DC5FCB73E8580F1751F8 /* SettingsView.swift */,
 				057AA34E95BBA0E0A024551D /* TaskListView.swift */,
 			);
@@ -241,9 +247,11 @@
 				9E7F5EF13D38A877BD715D15 /* ConfettiView.swift in Sources */,
 				18AB7F29C454891F7572E8DA /* ContentView.swift in Sources */,
 				0A774C5527A55C0DFD8D2540 /* EmptyStateView.swift in Sources */,
+				3BF91D0CBB9F8861854DBEC6 /* InsightsView.swift in Sources */,
 				EFDD813FF04A88E701D59054 /* NotificationManager.swift in Sources */,
 				1A1C0F2EE68A586C855280E8 /* PersistenceManager.swift in Sources */,
 				281774F61A7A941489559B34 /* PlanPopApp.swift in Sources */,
+				F59A8F0C8962B4E31FD7A4C4 /* ProductivityData.swift in Sources */,
 				1487ABBE57313EB2A53CF193 /* SettingsView.swift in Sources */,
 				CCA8782FED8784B2D1952C88 /* StoreManager.swift in Sources */,
 				F8432148C5C37CB5B0F5B80C /* StreakBadge.swift in Sources */,

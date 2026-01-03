@@ -64,6 +64,11 @@ struct UserSettings: Codable {
 
     /// IDs of unlocked achievements
     var unlockedAchievements: Set<String> = []
+
+    // MARK: - Productivity Analytics
+
+    /// Productivity tracking data for insights
+    var productivityData: ProductivityData = ProductivityData()
 }
 
 // MARK: - Streak Logic

@@ -89,7 +89,17 @@ class TaskViewModel: ObservableObject {
 
             // If completing the task, record for streak
             if tasks[index].isCompleted {
+                let now = Date()
+
+                // Record completion timestamp
+                tasks[index].completedAt = now
+
+                // Record for streak tracking
                 settings.recordTaskCompletion()
+
+                // Record for productivity analytics
+                settings.productivityData.recordCompletion(at: now)
+
                 saveSettings()
 
                 // Cancel reminder since task is done
@@ -100,6 +110,9 @@ class TaskViewModel: ObservableObject {
 
                 // Check if all tasks for today are complete
                 checkForConfetti()
+            } else {
+                // Clear completion timestamp when uncompleting
+                tasks[index].completedAt = nil
             }
 
             saveTasks()
