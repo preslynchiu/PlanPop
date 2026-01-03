@@ -16,6 +16,10 @@ struct AddTaskView: View {
     // Task being edited (nil for new task)
     var taskToEdit: Task?
 
+    // Pre-filled values from suggestion (optional)
+    var suggestedTitle: String?
+    var suggestedCategoryId: UUID?
+
     // Form state
     @State private var title: String = ""
     @State private var notes: String = ""
@@ -278,19 +282,28 @@ struct AddTaskView: View {
 
     // MARK: - Methods
 
-    /// Load existing task data when editing
+    /// Load existing task data when editing, or pre-fill from suggestion
     private func loadTaskData() {
-        guard let task = taskToEdit else { return }
-
-        title = task.title
-        notes = task.notes
-        hasDueDate = task.dueDate != nil
-        dueDate = task.dueDate ?? Date()
-        hasReminder = task.hasReminder
-        reminderDate = task.reminderDate ?? Date()
-        selectedCategoryId = task.categoryId
-        priority = task.priority
-        selectedIcon = task.iconName
+        if let task = taskToEdit {
+            // Editing existing task
+            title = task.title
+            notes = task.notes
+            hasDueDate = task.dueDate != nil
+            dueDate = task.dueDate ?? Date()
+            hasReminder = task.hasReminder
+            reminderDate = task.reminderDate ?? Date()
+            selectedCategoryId = task.categoryId
+            priority = task.priority
+            selectedIcon = task.iconName
+        } else {
+            // New task - check for suggestions
+            if let suggestedTitle = suggestedTitle {
+                title = suggestedTitle
+            }
+            if let suggestedCategoryId = suggestedCategoryId {
+                selectedCategoryId = suggestedCategoryId
+            }
+        }
     }
 
     /// Save the task (create new or update existing)

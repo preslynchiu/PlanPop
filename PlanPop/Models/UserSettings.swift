@@ -77,6 +77,11 @@ struct UserSettings: Codable {
 
     /// Total challenges completed
     var totalChallengesCompleted: Int = 0
+
+    // MARK: - Task Suggestions
+
+    /// Pattern tracker for smart suggestions
+    var taskPatterns: TaskPatternTracker = TaskPatternTracker()
 }
 
 // MARK: - Streak Logic

@@ -15,6 +15,8 @@ struct TaskListView: View {
     // Sheet states
     @State private var showingAddTask = false
     @State private var taskToEdit: Task?
+    @State private var showSuggestions = true
+    @State private var suggestionToAdd: TaskSuggestion?
 
     var body: some View {
         NavigationStack {
@@ -37,6 +39,24 @@ struct TaskListView: View {
                     // Filter pills
                     filterScrollView
 
+                    // Task suggestions
+                    if showSuggestions && !viewModel.taskSuggestions.isEmpty && viewModel.selectedFilter == .today {
+                        SuggestionBanner(
+                            suggestions: viewModel.taskSuggestions,
+                            onAccept: { suggestion in
+                                suggestionToAdd = suggestion
+                                showingAddTask = true
+                            },
+                            onDismiss: {
+                                withAnimation {
+                                    showSuggestions = false
+                                }
+                            }
+                        )
+                        .padding(.horizontal, Theme.padding)
+                        .padding(.bottom, 8)
+                    }
+
                     // Task list or empty state
                     if viewModel.filteredTasks.isEmpty {
                         emptyStateForCurrentFilter
@@ -57,8 +77,13 @@ struct TaskListView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showingAddTask) {
-                AddTaskView()
+            .sheet(isPresented: $showingAddTask, onDismiss: {
+                suggestionToAdd = nil
+            }) {
+                AddTaskView(
+                    suggestedTitle: suggestionToAdd?.title,
+                    suggestedCategoryId: suggestionToAdd?.categoryId
+                )
             }
             .sheet(item: $taskToEdit) { task in
                 AddTaskView(taskToEdit: task)

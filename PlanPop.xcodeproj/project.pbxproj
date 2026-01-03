@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A774C5527A55C0DFD8D2540 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6E5D446BBB0290ADA86D1D /* EmptyStateView.swift */; };
+		0C1BF292CE6C92808A8AA1EB /* SuggestionBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F9D405473AEEBDD888913B /* SuggestionBanner.swift */; };
 		1487ABBE57313EB2A53CF193 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2056DC5FCB73E8580F1751F8 /* SettingsView.swift */; };
 		18AB7F29C454891F7572E8DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEFA423D3293A4F87EDB3A5 /* ContentView.swift */; };
 		1A1C0F2EE68A586C855280E8 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A265CD4102C947536FDE050A /* PersistenceManager.swift */; };
@@ -17,6 +18,7 @@
 		36FC77614B64DC1A268E9496 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9C3222879DD81164C28041 /* Task.swift */; };
 		3BF91D0CBB9F8861854DBEC6 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0444DBD1EC985F0E73B3C7 /* InsightsView.swift */; };
 		3BFA523A13F6E08F48B4EDFD /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC52A8A7C2DA92FD5EE4D39A /* Theme.swift */; };
+		42D95A46104AB910BA31F181 /* TaskSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B991F63957DAF5253C3566 /* TaskSuggestion.swift */; };
 		47FE66688BE35DC56C3EF8D0 /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DACA0B1DE9FA867F5AD03A8 /* AchievementsView.swift */; };
 		5342235FE48BE0C7C24BA3E2 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099770BC48EFF2C0F8FCF17 /* AddTaskView.swift */; };
 		633D6961EAECA5CC04DD98A5 /* MotivationalQuote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EACF14C1258DF555C512595 /* MotivationalQuote.swift */; };
@@ -47,6 +49,7 @@
 		1F6E5D446BBB0290ADA86D1D /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		2056DC5FCB73E8580F1751F8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2B8BD8CA8FA8E026A528ADF3 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		34B991F63957DAF5253C3566 /* TaskSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskSuggestion.swift; sourceTree = "<group>"; };
 		3F9C3222879DD81164C28041 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		474C748D75AC9ED30FA74C17 /* DailyChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallenge.swift; sourceTree = "<group>"; };
 		4AD717868A7035C9E82FB286 /* StreakBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakBadge.swift; sourceTree = "<group>"; };
@@ -62,6 +65,7 @@
 		7CED1A407A6D1A86C86BAAC5 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		7DACA0B1DE9FA867F5AD03A8 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
 		81892E5041E5E7A563CB0837 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		87F9D405473AEEBDD888913B /* SuggestionBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionBanner.swift; sourceTree = "<group>"; };
 		8EACF14C1258DF555C512595 /* MotivationalQuote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationalQuote.swift; sourceTree = "<group>"; };
 		92FF420C4DF809F7930D88D4 /* PlanPop.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PlanPop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A099770BC48EFF2C0F8FCF17 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
@@ -78,6 +82,7 @@
 				611954B1799143506D98516B /* DailyChallengeCard.swift */,
 				1F6E5D446BBB0290ADA86D1D /* EmptyStateView.swift */,
 				4AD717868A7035C9E82FB286 /* StreakBadge.swift */,
+				87F9D405473AEEBDD888913B /* SuggestionBanner.swift */,
 				520D22589127242370A142DB /* TaskRow.swift */,
 			);
 			path = Components;
@@ -92,6 +97,7 @@
 				8EACF14C1258DF555C512595 /* MotivationalQuote.swift */,
 				10324114EC6A869970DD9A14 /* ProductivityData.swift */,
 				3F9C3222879DD81164C28041 /* Task.swift */,
+				34B991F63957DAF5253C3566 /* TaskSuggestion.swift */,
 				7BBB0E0527D4ED05BB802E71 /* UserSettings.swift */,
 			);
 			path = Models;
@@ -271,9 +277,11 @@
 				8BB8A53725F55721EB593779 /* SoundManager.swift in Sources */,
 				CCA8782FED8784B2D1952C88 /* StoreManager.swift in Sources */,
 				F8432148C5C37CB5B0F5B80C /* StreakBadge.swift in Sources */,
+				0C1BF292CE6C92808A8AA1EB /* SuggestionBanner.swift in Sources */,
 				36FC77614B64DC1A268E9496 /* Task.swift in Sources */,
 				76F4AC89AF5BC1E4B8BBEA97 /* TaskListView.swift in Sources */,
 				BC7E8838FCE36161E51F4719 /* TaskRow.swift in Sources */,
+				42D95A46104AB910BA31F181 /* TaskSuggestion.swift in Sources */,
 				1C5EA1451513467EC384FFD3 /* TaskViewModel.swift in Sources */,
 				3BFA523A13F6E08F48B4EDFD /* Theme.swift in Sources */,
 				3192676AD13B419E3AACB9B6 /* UserSettings.swift in Sources */,

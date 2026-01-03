@@ -74,6 +74,13 @@ class TaskViewModel: ObservableObject {
         tasks.append(newTask)
         saveTasks()
 
+        // Record pattern for suggestions
+        settings.taskPatterns.recordTaskCreation(
+            title: task.title,
+            categoryId: task.categoryId
+        )
+        saveSettings()
+
         // Schedule notification if needed
         if newTask.hasReminder {
             NotificationManager.shared.scheduleReminder(for: newTask)
@@ -232,6 +239,14 @@ class TaskViewModel: ObservableObject {
     /// Get overdue tasks
     var overdueTasks: [Task] {
         tasks.filter { $0.isOverdue }
+    }
+
+    /// Get task suggestions based on patterns
+    var taskSuggestions: [TaskSuggestion] {
+        settings.taskPatterns.getSuggestions(
+            existingTasks: tasks,
+            categories: categories
+        )
     }
 
     // MARK: - Confetti Logic
