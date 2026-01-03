@@ -27,6 +27,13 @@ struct TaskListView: View {
                     // Header with streak
                     headerView
 
+                    // Daily challenge card
+                    if let challenge = viewModel.settings.currentChallenge {
+                        DailyChallengeCard(challenge: challenge)
+                            .padding(.horizontal, Theme.padding)
+                            .padding(.bottom, 8)
+                    }
+
                     // Filter pills
                     filterScrollView
 

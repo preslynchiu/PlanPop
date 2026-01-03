@@ -69,6 +69,14 @@ struct UserSettings: Codable {
 
     /// Productivity tracking data for insights
     var productivityData: ProductivityData = ProductivityData()
+
+    // MARK: - Daily Challenges
+
+    /// Current daily challenge
+    var currentChallenge: DailyChallenge?
+
+    /// Total challenges completed
+    var totalChallengesCompleted: Int = 0
 }
 
 // MARK: - Streak Logic

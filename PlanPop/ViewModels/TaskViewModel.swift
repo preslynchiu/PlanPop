@@ -30,6 +30,9 @@ class TaskViewModel: ObservableObject {
     /// Newly unlocked achievement (for celebration UI)
     @Published var newlyUnlockedAchievement: Achievement?
 
+    /// Daily challenge completed (for celebration UI)
+    @Published var challengeJustCompleted: Bool = false
+
     // MARK: - Constants
 
     /// Maximum categories for free users
@@ -46,6 +49,21 @@ class TaskViewModel: ObservableObject {
         tasks = PersistenceManager.shared.loadTasks()
         categories = PersistenceManager.shared.loadCategories()
         settings = PersistenceManager.shared.loadSettings()
+
+        // Initialize or refresh daily challenge
+        refreshDailyChallenge()
+    }
+
+    /// Refresh the daily challenge if needed
+    private func refreshDailyChallenge() {
+        if let existing = settings.currentChallenge, existing.isForToday {
+            // Challenge is still valid for today
+            return
+        }
+
+        // Create new challenge for today
+        settings.currentChallenge = DailyChallenge.forToday()
+        saveSettings()
     }
 
     // MARK: - Task CRUD Operations
@@ -107,6 +125,9 @@ class TaskViewModel: ObservableObject {
 
                 // Check for achievements
                 checkForAchievements()
+
+                // Check daily challenge
+                checkDailyChallenge()
 
                 // Check if all tasks for today are complete
                 checkForConfetti()
@@ -262,6 +283,58 @@ class TaskViewModel: ObservableObject {
     /// Clear the newly unlocked achievement (after showing celebration)
     func clearNewlyUnlockedAchievement() {
         newlyUnlockedAchievement = nil
+    }
+
+    // MARK: - Daily Challenge Logic
+
+    /// Check if daily challenge is completed
+    func checkDailyChallenge() {
+        guard var challenge = settings.currentChallenge, !challenge.isCompleted else { return }
+
+        let hour = Calendar.current.component(.hour, from: Date())
+
+        // Count tasks completed today
+        let tasksCompletedToday = tasks.filter {
+            $0.isCompleted && $0.completedAt != nil && Calendar.current.isDateInToday($0.completedAt!)
+        }.count
+
+        // Count completions per category today
+        var categoryCompletions: [UUID: Int] = [:]
+        for task in tasks where task.isCompleted && task.completedAt != nil && Calendar.current.isDateInToday(task.completedAt!) {
+            if let catId = task.categoryId {
+                categoryCompletions[catId, default: 0] += 1
+            }
+        }
+
+        // Check if all today's tasks are done
+        let todaysTasks = tasks.filter {
+            $0.isDueToday || (Calendar.current.isDateInToday($0.createdAt) && $0.dueDate == nil)
+        }
+        let allTodayTasksDone = !todaysTasks.isEmpty && todaysTasks.allSatisfy { $0.isCompleted }
+
+        // Check the challenge
+        let wasCompleted = challenge.checkCompletion(
+            tasksCompletedToday: tasksCompletedToday,
+            completionHour: hour,
+            hasStreak: settings.currentStreak > 0,
+            categoryCompletions: categoryCompletions,
+            allTodayTasksDone: allTodayTasksDone
+        )
+
+        // Update settings
+        settings.currentChallenge = challenge
+
+        if wasCompleted {
+            settings.totalChallengesCompleted += 1
+            challengeJustCompleted = true
+
+            // Auto-hide celebration after delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.challengeJustCompleted = false
+            }
+        }
+
+        saveSettings()
     }
 
     // MARK: - Settings Operations
