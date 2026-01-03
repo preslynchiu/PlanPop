@@ -193,6 +193,14 @@ Setting up for future monetization.
   - Auto-unlock on task completion, category creation, premium upgrade
   - Celebration alert when achievement unlocked
 
+- [x] Add smart features (analytics & insights)
+  - ProductivityData model tracking completion times and patterns
+  - Task.completedAt timestamp for analytics
+  - InsightsView with weekly/monthly productivity reports
+  - Last 7 days bar chart visualization
+  - Peak productivity hour and day detection
+  - Smart reminder suggestions based on user patterns
+
 ---
 
 ## Phase 8: Testing & Polish
@@ -252,6 +260,7 @@ PlanPop/
 │   ├── Task.swift            # Task data model
 │   ├── Category.swift        # Category data model
 │   ├── Achievement.swift     # Achievement badges
+│   ├── ProductivityData.swift    # Analytics tracking
 │   └── UserSettings.swift    # User preferences
 ├── Views/
 │   ├── ContentView.swift     # Main tab container
@@ -259,7 +268,8 @@ PlanPop/
 │   ├── AddTaskView.swift     # Add/edit task form
 │   ├── SettingsView.swift    # Settings screen
 │   ├── CategoryManagerView.swift  # Manage categories
-│   └── AchievementsView.swift     # Achievement badges grid
+│   ├── AchievementsView.swift     # Achievement badges grid
+│   └── InsightsView.swift         # Productivity insights
 ├── ViewModels/
 │   └── TaskViewModel.swift   # Business logic
 ├── Managers/
