@@ -25,9 +25,11 @@ struct AddTaskView: View {
     @State private var reminderDate: Date = Date()
     @State private var selectedCategoryId: UUID?
     @State private var priority: Int = 2
+    @State private var selectedIcon: String? = nil
 
     // UI state
     @State private var showingDeleteAlert = false
+    @State private var showingPremiumInfo = false
 
     // Is this editing an existing task?
     var isEditing: Bool {
@@ -123,6 +125,41 @@ struct AddTaskView: View {
                     .pickerStyle(.segmented)
                 }
 
+                // Icon section (premium feature)
+                Section {
+                    if viewModel.settings.isPremium {
+                        iconPickerGrid
+                    } else {
+                        Button {
+                            showingPremiumInfo = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "lock.fill")
+                                    .font(.caption)
+                                    .foregroundColor(Theme.textSecondary)
+                                Text("Task Icons")
+                                    .foregroundColor(Theme.textPrimary)
+                                Spacer()
+                                Text("Premium")
+                                    .font(.caption)
+                                    .foregroundColor(Theme.textSecondary)
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(Theme.textSecondary)
+                            }
+                        }
+                    }
+                } header: {
+                    HStack {
+                        Text("Icon")
+                        if !viewModel.settings.isPremium {
+                            Image(systemName: "crown.fill")
+                                .font(.caption2)
+                                .foregroundColor(.yellow)
+                        }
+                    }
+                }
+
                 // Delete button (only when editing)
                 if isEditing {
                     Section {
@@ -169,6 +206,73 @@ struct AddTaskView: View {
             .onAppear {
                 loadTaskData()
             }
+            .sheet(isPresented: $showingPremiumInfo) {
+                PremiumInfoView()
+            }
+        }
+    }
+
+    // MARK: - Icon Picker Grid
+
+    private var iconPickerGrid: some View {
+        VStack(spacing: 12) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 12) {
+                // "None" option
+                Button {
+                    selectedIcon = nil
+                } label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(selectedIcon == nil ? Theme.primary : Theme.primary.opacity(0.15))
+                            .frame(width: 50, height: 50)
+
+                        Image(systemName: "xmark")
+                            .font(.title3)
+                            .foregroundColor(selectedIcon == nil ? .white : Theme.primary)
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+
+                // Icon options
+                ForEach(Task.availableIcons, id: \.self) { iconName in
+                    Button {
+                        selectedIcon = iconName
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(selectedIcon == iconName ? Theme.primary : Theme.primary.opacity(0.15))
+                                .frame(width: 50, height: 50)
+
+                            Image(systemName: iconName)
+                                .font(.title3)
+                                .foregroundColor(selectedIcon == iconName ? .white : Theme.primary)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .padding(.vertical, 8)
+
+            // Preview
+            if let icon = selectedIcon {
+                HStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .fill(Theme.primary.opacity(0.15))
+                            .frame(width: 32, height: 32)
+                        Image(systemName: icon)
+                            .font(.system(size: 14))
+                            .foregroundColor(Theme.primary)
+                    }
+                    Text(title.isEmpty ? "Task Preview" : title)
+                        .font(.body)
+                        .foregroundColor(Theme.textPrimary)
+                    Spacer()
+                }
+                .padding(12)
+                .background(Theme.cardBackground)
+                .cornerRadius(Theme.cornerRadius)
+            }
         }
     }
 
@@ -186,6 +290,7 @@ struct AddTaskView: View {
         reminderDate = task.reminderDate ?? Date()
         selectedCategoryId = task.categoryId
         priority = task.priority
+        selectedIcon = task.iconName
     }
 
     /// Save the task (create new or update existing)
@@ -202,6 +307,7 @@ struct AddTaskView: View {
             task.reminderDate = hasReminder ? reminderDate : nil
             task.categoryId = selectedCategoryId
             task.priority = priority
+            task.iconName = selectedIcon
 
             viewModel.updateTask(task)
         } else {
@@ -213,6 +319,7 @@ struct AddTaskView: View {
             newTask.reminderDate = hasReminder ? reminderDate : nil
             newTask.categoryId = selectedCategoryId
             newTask.priority = priority
+            newTask.iconName = selectedIcon
 
             viewModel.addTask(newTask)
         }

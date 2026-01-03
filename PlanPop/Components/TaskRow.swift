@@ -68,6 +68,18 @@ struct TaskRow: View {
             }
             .buttonStyle(PlainButtonStyle())
 
+            // Task icon (if set)
+            if let iconName = task.iconName {
+                ZStack {
+                    Circle()
+                        .fill(Theme.primary.opacity(0.15))
+                        .frame(width: 32, height: 32)
+                    Image(systemName: iconName)
+                        .font(.system(size: 14))
+                        .foregroundColor(task.isCompleted ? Theme.textSecondary : Theme.primary)
+                }
+            }
+
             // Task content
             VStack(alignment: .leading, spacing: 4) {
                 // Task title
@@ -150,6 +162,10 @@ struct TaskRow: View {
             label = "Completed: \(label)"
         }
 
+        if task.iconName != nil {
+            label += ", Has icon"
+        }
+
         if let category = category {
             label += ", Category: \(category.name)"
         }
@@ -196,14 +212,14 @@ struct TaskRow: View {
 #Preview {
     VStack(spacing: 12) {
         TaskRow(
-            task: Task(title: "Complete homework", dueDate: Date(), priority: 3),
+            task: Task(title: "Complete homework", dueDate: Date(), iconName: "book.fill", priority: 3),
             category: Category.defaultCategories[0],
             onToggle: {},
             onTap: {}
         )
 
         TaskRow(
-            task: Task(title: "Practice piano for 30 minutes", isCompleted: true),
+            task: Task(title: "Practice piano for 30 minutes", isCompleted: true, iconName: "star.fill"),
             category: nil,
             onToggle: {},
             onTap: {}

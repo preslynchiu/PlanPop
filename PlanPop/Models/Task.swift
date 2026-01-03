@@ -76,13 +76,37 @@ extension Task {
     }
 }
 
+// MARK: - Available Icons (Premium Feature)
+
+extension Task {
+    /// Available icons for tasks (SF Symbols)
+    static let availableIcons: [String] = [
+        "star.fill",
+        "heart.fill",
+        "bolt.fill",
+        "flag.fill",
+        "book.fill",
+        "pencil",
+        "lightbulb.fill",
+        "target",
+        "gift.fill",
+        "cart.fill",
+        "phone.fill",
+        "envelope.fill",
+        "airplane",
+        "car.fill",
+        "leaf.fill",
+        "sun.max.fill"
+    ]
+}
+
 // MARK: - Sample Data for Previews
 
 extension Task {
     static let sampleTasks: [Task] = [
-        Task(title: "Finish math homework", dueDate: Date(), categoryId: nil, priority: 3),
-        Task(title: "Read chapter 5", notes: "History textbook", dueDate: Calendar.current.date(byAdding: .day, value: 1, to: Date()), categoryId: nil, priority: 2),
+        Task(title: "Finish math homework", dueDate: Date(), categoryId: nil, iconName: "book.fill", priority: 3),
+        Task(title: "Read chapter 5", notes: "History textbook", dueDate: Calendar.current.date(byAdding: .day, value: 1, to: Date()), categoryId: nil, iconName: "pencil", priority: 2),
         Task(title: "Practice piano", dueDate: Date(), categoryId: nil, priority: 1),
-        Task(title: "Call grandma", isCompleted: true, dueDate: Date(), categoryId: nil)
+        Task(title: "Call grandma", isCompleted: true, dueDate: Date(), categoryId: nil, iconName: "phone.fill")
     ]
 }

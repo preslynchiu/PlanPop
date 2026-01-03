@@ -36,6 +36,13 @@ struct ContentView: View {
         .tint(Theme.primary)
         .environmentObject(viewModel)
         .confetti(isShowing: $viewModel.showConfetti)
+        .task {
+            // Initialize StoreManager and sync premium status on launch
+            await StoreManager.shared.updatePurchasedStatus()
+            if StoreManager.shared.isPremiumPurchased {
+                viewModel.setPremiumStatus(true)
+            }
+        }
         .onAppear {
             // Style the tab bar
             let appearance = UITabBarAppearance()

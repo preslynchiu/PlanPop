@@ -171,14 +171,14 @@ Setting up for future monetization.
 - [x] Limit categories to 3 for free users
 - [x] Create Premium info sheet with feature list
 
-- [ ] Add StoreKit 2 integration (future)
-  - Create product identifiers
-  - Implement purchase flow
-  - Implement restore purchases
-  - Handle purchase errors
+- [x] Add StoreKit 2 integration
+  - Created product identifier (`com.planpop.app.premium.lifetime`)
+  - Implemented purchase flow with verification
+  - Implemented restore purchases
+  - Added error handling and loading states
 
-- [ ] Add task icons/stickers (premium feature)
-  - Icon picker in AddTaskView
+- [x] Add task icons/stickers (premium feature)
+  - Icon picker in AddTaskView (premium-gated)
   - Display icons in TaskRow
 
 ---

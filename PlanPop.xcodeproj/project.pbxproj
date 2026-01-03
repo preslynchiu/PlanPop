@@ -23,6 +23,7 @@
 		9E7F5EF13D38A877BD715D15 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FCD3A0655A2334AD259891C /* ConfettiView.swift */; };
 		B952D1EB762A44A824DB189B /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE9D54CA2BCE406BD1FDD92 /* Category.swift */; };
 		BC7E8838FCE36161E51F4719 /* TaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520D22589127242370A142DB /* TaskRow.swift */; };
+		CCA8782FED8784B2D1952C88 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED1A407A6D1A86C86BAAC5 /* StoreManager.swift */; };
 		D3109DB8D1564DBB0FCDA795 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5979AC4D327F6D16A52AE97F /* Preview Assets.xcassets */; };
 		EFDD813FF04A88E701D59054 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81892E5041E5E7A563CB0837 /* NotificationManager.swift */; };
 		F8432148C5C37CB5B0F5B80C /* StreakBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD717868A7035C9E82FB286 /* StreakBadge.swift */; };
@@ -45,6 +46,7 @@
 		6ED8EA538816ABE29A379AE4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7199AE5E1C0E4E4842B73704 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		7BBB0E0527D4ED05BB802E71 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		7CED1A407A6D1A86C86BAAC5 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		81892E5041E5E7A563CB0837 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		92FF420C4DF809F7930D88D4 /* PlanPop.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PlanPop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A099770BC48EFF2C0F8FCF17 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			children = (
 				81892E5041E5E7A563CB0837 /* NotificationManager.swift */,
 				A265CD4102C947536FDE050A /* PersistenceManager.swift */,
+				7CED1A407A6D1A86C86BAAC5 /* StoreManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 				1A1C0F2EE68A586C855280E8 /* PersistenceManager.swift in Sources */,
 				281774F61A7A941489559B34 /* PlanPopApp.swift in Sources */,
 				1487ABBE57313EB2A53CF193 /* SettingsView.swift in Sources */,
+				CCA8782FED8784B2D1952C88 /* StoreManager.swift in Sources */,
 				F8432148C5C37CB5B0F5B80C /* StreakBadge.swift in Sources */,
 				36FC77614B64DC1A268E9496 /* Task.swift in Sources */,
 				76F4AC89AF5BC1E4B8BBEA97 /* TaskListView.swift in Sources */,

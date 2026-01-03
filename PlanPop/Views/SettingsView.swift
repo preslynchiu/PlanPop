@@ -272,6 +272,11 @@ struct StatBox: View {
 struct PremiumInfoView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var viewModel: TaskViewModel
+    @ObservedObject private var storeManager = StoreManager.shared
+
+    @State private var showingAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
 
     var body: some View {
         NavigationStack {
@@ -291,30 +296,54 @@ struct PremiumInfoView: View {
                     PremiumFeatureRow(icon: "paintpalette.fill", text: "All color themes")
                     PremiumFeatureRow(icon: "folder.fill", text: "Unlimited categories")
                     PremiumFeatureRow(icon: "star.fill", text: "Custom task icons")
-                    PremiumFeatureRow(icon: "xmark.circle.fill", text: "Ad-free experience")
+                    PremiumFeatureRow(icon: "heart.fill", text: "Support indie development")
                 }
                 .padding(.horizontal, 40)
 
                 Spacer()
 
-                // Purchase button placeholder
+                // Price display
+                if let product = storeManager.premiumProduct {
+                    VStack(spacing: 4) {
+                        Text("One-time purchase")
+                            .font(.caption)
+                            .foregroundColor(Theme.textSecondary)
+                        Text(product.displayPrice)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(Theme.primary)
+                    }
+                }
+
+                // Purchase button
                 Button {
-                    // TODO: Implement in-app purchase
-                    // For now, just toggle premium for testing
-                    viewModel.setPremiumStatus(true)
-                    dismiss()
+                    _Concurrency.Task {
+                        await storeManager.purchasePremium()
+                    }
                 } label: {
-                    Text("Coming Soon!")
+                    HStack {
+                        if storeManager.purchaseState == .purchasing ||
+                           storeManager.purchaseState == .loading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .padding(.trailing, 8)
+                        }
+                        Text(purchaseButtonTitle)
+                    }
                 }
                 .buttonStyle(.primary)
                 .padding(.horizontal, 24)
+                .disabled(isPurchaseDisabled)
 
                 // Restore purchases
                 Button("Restore Purchases") {
-                    // TODO: Implement restore
+                    _Concurrency.Task {
+                        await storeManager.restorePurchases()
+                    }
                 }
                 .font(.subheadline)
                 .foregroundColor(Theme.textSecondary)
+                .disabled(storeManager.purchaseState == .loading)
                 .padding(.bottom, 24)
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -325,6 +354,83 @@ struct PremiumInfoView: View {
                     }
                 }
             }
+            .onChange(of: storeManager.purchaseState) { newState in
+                handlePurchaseStateChange(newState)
+            }
+            .onChange(of: storeManager.isPremiumPurchased) { isPurchased in
+                if isPurchased {
+                    viewModel.setPremiumStatus(true)
+                }
+            }
+            .alert(alertTitle, isPresented: $showingAlert) {
+                Button("OK", role: .cancel) {
+                    storeManager.resetState()
+                    if storeManager.isPremiumPurchased {
+                        dismiss()
+                    }
+                }
+            } message: {
+                Text(alertMessage)
+            }
+            .task {
+                // Ensure products are loaded
+                if storeManager.premiumProduct == nil {
+                    await storeManager.loadProducts()
+                }
+            }
+        }
+    }
+
+    // MARK: - Computed Properties
+
+    private var purchaseButtonTitle: String {
+        switch storeManager.purchaseState {
+        case .purchasing:
+            return "Purchasing..."
+        case .loading:
+            return "Loading..."
+        case .purchased:
+            return "Purchased!"
+        case .pending:
+            return "Pending..."
+        default:
+            if viewModel.settings.isPremium {
+                return "Already Premium"
+            }
+            return "Unlock Premium - \(storeManager.priceString)"
+        }
+    }
+
+    private var isPurchaseDisabled: Bool {
+        switch storeManager.purchaseState {
+        case .purchasing, .loading, .pending:
+            return true
+        default:
+            return viewModel.settings.isPremium || storeManager.premiumProduct == nil
+        }
+    }
+
+    // MARK: - State Handling
+
+    private func handlePurchaseStateChange(_ state: PurchaseState) {
+        switch state {
+        case .purchased:
+            alertTitle = "Thank You!"
+            alertMessage = "You now have access to all premium features."
+            showingAlert = true
+
+        case .failed(let message):
+            alertTitle = "Purchase Failed"
+            alertMessage = message
+            showingAlert = true
+
+        case .pending:
+            alertTitle = "Purchase Pending"
+            alertMessage = "Your purchase is awaiting approval."
+            showingAlert = true
+
+        default:
+            break
         }
     }
 }
