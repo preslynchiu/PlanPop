@@ -62,22 +62,31 @@ struct TaskListView: View {
     // MARK: - Header View
 
     private var headerView: some View {
-        HStack {
-            // Greeting based on time of day
-            VStack(alignment: .leading, spacing: 4) {
-                Text(greeting)
-                    .font(.subheadline)
-                    .foregroundColor(Theme.textSecondary)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                // Greeting based on time of day
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(greeting)
+                        .font(.subheadline)
+                        .foregroundColor(Theme.textSecondary)
 
-                Text(formattedDate)
-                    .font(.caption)
-                    .foregroundColor(Theme.textSecondary)
+                    Text(formattedDate)
+                        .font(.caption)
+                        .foregroundColor(Theme.textSecondary)
+                }
+
+                Spacer()
+
+                // Streak badge
+                StreakBadge(streak: viewModel.settings.currentStreak)
             }
 
-            Spacer()
-
-            // Streak badge
-            StreakBadge(streak: viewModel.settings.currentStreak)
+            // Motivational quote
+            Text(MotivationalQuote.todaysQuote)
+                .font(.footnote)
+                .fontWeight(.medium)
+                .foregroundColor(Theme.primary)
+                .lineLimit(2)
         }
         .padding(.horizontal, Theme.padding)
         .padding(.vertical, Theme.smallPadding)
