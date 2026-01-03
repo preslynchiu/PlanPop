@@ -220,6 +220,14 @@ Setting up for future monetization.
   - All tasks done celebration sound
   - Haptic feedback for all interactions
 
+- [x] Add smart task suggestions
+  - TaskSuggestion model with pattern tracking
+  - Tracks task creation by day of week
+  - Detects patterns ("You often add this on Mondays")
+  - SuggestionBanner component with accept/dismiss
+  - Pre-fills AddTaskView when accepting suggestions
+  - Category suggestions based on usage patterns
+
 ---
 
 ## Phase 8: Testing & Polish
@@ -282,6 +290,7 @@ PlanPop/
 │   ├── ProductivityData.swift    # Analytics tracking
 │   ├── MotivationalQuote.swift   # Daily quotes
 │   ├── DailyChallenge.swift      # Daily challenges
+│   ├── TaskSuggestion.swift      # Smart suggestions
 │   └── UserSettings.swift    # User preferences
 ├── Views/
 │   ├── ContentView.swift     # Main tab container
@@ -303,7 +312,8 @@ PlanPop/
 │   ├── EmptyStateView.swift  # Empty state message
 │   ├── ConfettiView.swift    # Celebration animation
 │   ├── StreakBadge.swift     # Streak display
-│   └── DailyChallengeCard.swift  # Daily challenge card
+│   ├── DailyChallengeCard.swift  # Daily challenge card
+│   └── SuggestionBanner.swift    # Smart suggestions banner
 ├── Theme/
 │   └── Theme.swift           # Colors and styles
 ├── Products.storekit         # StoreKit configuration
