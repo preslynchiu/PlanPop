@@ -176,6 +176,8 @@ Setting up for future monetization.
   - Implemented purchase flow with verification
   - Implemented restore purchases
   - Added error handling and loading states
+  - **Note:** To test purchases in simulator, configure StoreKit in scheme:
+    - Edit Scheme → Run → Options → StoreKit Configuration → Select `Products.storekit`
 
 - [x] Add task icons/stickers (premium feature)
   - Icon picker in AddTaskView (premium-gated)

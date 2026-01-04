@@ -538,6 +538,11 @@ struct PremiumInfoView: View {
             alertMessage = "You now have access to all premium features."
             showingAlert = true
 
+        case .restored:
+            alertTitle = "Restored!"
+            alertMessage = "Your premium purchase has been restored."
+            showingAlert = true
+
         case .failed(let message):
             alertTitle = "Purchase Failed"
             alertMessage = message
